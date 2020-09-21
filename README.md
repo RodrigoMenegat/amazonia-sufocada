@@ -26,7 +26,7 @@ Para reproduzir o projeto na íntegra, você vai precisar de contas e acesso às
 - Agora, precisamos instalar os pré-requisitos para rodar o código-fonte. Vamos lá, passo-a-passo:
 	1. Instale o Anaconda3, que pode ser baixado [neste link](https://www.anaconda.com/products/individual).
 	2. Crie um ambiente virtual no Anaconda executando o comando `conda env create --file environment.yml`
-	3. Já dentro do ambiente recém criado, instale a interface de linha de comando do Mapbox. Instruções [aqui].(https://github.com/mapbox/mapbox-cli-py)
+	3. Já dentro do ambiente recém criado, instale a interface de linha de comando do Mapbox. Instruções [aqui](https://github.com/mapbox/mapbox-cli-py).
 	4. Instale o tippecanoe, também do Mapbox, [conforme as instruções](https://github.com/mapbox/tippecanoe).
 	5. Modifique os arquivos `setup.sh` e `update_data.sh` com os caminhos para sua instalação local do Anaconda e para o diretório em que você clonou o projeto.
 	6. No diretório code, crie arquivos chamados `twitter_credentials.py` e `mapbox_credentials.py` com as suas chaves de acesso às APIs dos respectivos serviços.
