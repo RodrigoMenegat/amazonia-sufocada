@@ -1,6 +1,6 @@
 '''
 Salva recortes específicos dos bancos de dados completos 
-em formato GeoJSON. Eles seram usados para enviar ao Mapbox
+em formato GeoJSON. Eles serão usados para enviar ao Mapbox
 recortes de dados menores, em que todos os pontos precisam
 estar visíveis ao mesmo tempo para evitar dissonância na mensagem.
 '''
