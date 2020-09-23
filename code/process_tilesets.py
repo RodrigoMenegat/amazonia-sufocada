@@ -66,7 +66,7 @@ def tippecanoe(source):
 	# Se o output já existir, passa --force. Se não, não
 
 	if source[0] in ["amzsufocada-24h-tis", "amzsufocada-24h-ucs", "amzsufocada-24h-ti-most-fire", "amzsufocada-24h-uc-most-fire"]:
-		command = f"tippecanoe -zg --force -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles -l {source[0]} {source[1]} -b0 -r1 --drop-densest-as-needed"
+		command = f"tippecanoe -zg --force -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles -l {source[0]} {source[1]} -b0  --drop-densest-as-needed"
 
 
 	else:
@@ -76,7 +76,7 @@ def tippecanoe(source):
 	print(command)
 	result = subprocess.run(command, shell=True, capture_output=True, check=True)
 	print(result.stdout)
-	print(reuslt.stderr)
+	print(result.stderr)
 
 
 def upload(source):
@@ -97,7 +97,7 @@ def upload(source):
 	print(command)
 	result = subprocess.run(command, env={"MAPBOX_ACCESS_TOKEN": TOKEN}, capture_output=True, check=True)
 	print(result.stdout)
-	print(reuslt.stderr)
+	print(result.stderr)
 
 
 
