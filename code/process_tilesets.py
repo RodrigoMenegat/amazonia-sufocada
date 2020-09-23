@@ -74,7 +74,9 @@ def tippecanoe(source):
 
 
 	print(command)
-	subprocess.run(command, shell=True)
+	result = subprocess.run(command, shell=True, capture_output=True, check=True)
+	print(result.stdout)
+	print(reuslt.stderr)
 
 
 def upload(source):
@@ -93,7 +95,10 @@ def upload(source):
 	command = [f"{CONDA_PREFIX}/bin/mapbox", "upload", f"{USERNAME}.{source[0]}", f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles"]
 
 	print(command)
-	subprocess.run(command, env={"MAPBOX_ACCESS_TOKEN": TOKEN})
+	result = subprocess.run(command, env={"MAPBOX_ACCESS_TOKEN": TOKEN}, capture_output=True, check=True)
+	print(result.stdout)
+	print(reuslt.stderr)
+
 
 
 
