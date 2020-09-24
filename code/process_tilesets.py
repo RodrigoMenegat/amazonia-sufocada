@@ -14,6 +14,7 @@ https://github.com/mapbox/tilesets-cli/
 import mapbox_credentials
 import json
 import os
+import shutil
 import subprocess
 import time
 
@@ -34,13 +35,13 @@ TOKEN = mapbox_credentials.token
 USERNAME = "infoamazonia"
 
 SOURCES = [
-	("amzsufocada-24h", f"{PROJECT_ROOT}/output/jsons/tilesets/24h.json"),
-	("amzsufocada-24h-tis", f"{PROJECT_ROOT}/output/jsons/tilesets/24h_tis.json"),
-	("amzsufocada-24h-ucs", f"{PROJECT_ROOT}/output/jsons/tilesets/24h_ucs.json"),
-	("amzsufocada-24h-ti-most-fire", f"{PROJECT_ROOT}/output/jsons/tilesets/24h_ti_most_fire.json" ),
-	("amzsufocada-24h-ucs-most-fire", f"{PROJECT_ROOT}/output/jsons/tilesets/24h_uc_most_fire.json"),
-	("amzsufocada-7d", f"{PROJECT_ROOT}/output/jsons/tilesets/7d.json"),
-	("amzsufocada-bd-completo", f"{PROJECT_ROOT}/output/jsons/tilesets/bd_completo.json"),
+        ("amzsufocada-24h", f"{PROJECT_ROOT}/output/jsons/tilesets/24h.json"),
+        ("amzsufocada-24h-tis", f"{PROJECT_ROOT}/output/jsons/tilesets/24h_tis.json"),
+        ("amzsufocada-24h-ucs", f"{PROJECT_ROOT}/output/jsons/tilesets/24h_ucs.json"),
+        ("amzsufocada-24h-ti-most-fire", f"{PROJECT_ROOT}/output/jsons/tilesets/24h_ti_most_fire.json" ),
+        ("amzsufocada-24h-ucs-most-fire", f"{PROJECT_ROOT}/output/jsons/tilesets/24h_uc_most_fire.json"),
+        ("amzsufocada-7d", f"{PROJECT_ROOT}/output/jsons/tilesets/7d.json"),
+        ("amzsufocada-bd-completo", f"{PROJECT_ROOT}/output/jsons/tilesets/bd_completo.json"),
     ("amzsufocada-terras-indigenas", f"{PROJECT_ROOT}/output/jsons/land_info/terras_indigenas.json"),
     ("amzsufocada-unidades-conserv", f"{PROJECT_ROOT}/output/jsons/land_info/unidades_de_conservacao.json"),
     ("amzsufocada-biomas", f"{PROJECT_ROOT}/output/jsons/land_info/biomas.json"),
@@ -51,56 +52,68 @@ SOURCES = [
 ### Helpers ###
 ###############
 
+
 def tippecanoe(source):
-	'''
-	Passa os arquivos de GeoJSON selecionados para o
-	tippecanoe através da linha de comando. O output
-	é salvo como um arquivo .mbtiles no caminho de destino
+        '''
+        Passa os arquivos de GeoJSON selecionados para o
+        tippecanoe através da linha de comando. O output
+        é salvo como um arquivo .mbtiles no caminho de destino
 
-	Parâmetros:	
-
-
-	> source: uma tupla no formato (nome-camada, caminho). Exemplo: ("amzsufocada-24h", "../output/jsons/tilesets/24h.json")
-	'''
-
-	# Se o output já existir, passa --force. Se não, não
-
-	if source[0] in ["amzsufocada-24h-tis", "amzsufocada-24h-ucs", "amzsufocada-24h-ti-most-fire", "amzsufocada-24h-ucs-most-fire"]:
-		command = f"tippecanoe -zg --force -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles -l {source[0]} {source[1]} -b0 --drop-densest-as-needed"
+        Parâmetros:     
 
 
-	else:
-		command = f"tippecanoe -zg --force -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles -l {source[0]} {source[1]} -b0 --drop-densest-as-needed"
+        > source: uma tupla no formato (nome-camada, caminho). Exemplo: ("amzsufocada-24h", "../output/jsons/tilesets/24h.json")
+        '''
+
+        # Se o output já existir, passa --force. Se não, não
+
+        if source[0] in ["amzsufocada-24h-tis", "amzsufocada-24h-ucs", "amzsufocada-23h-ti-most-fire", "amzsufocada-24h-ucs-most-fire"]:
+                # Due to a weird bug, combining the --force and -r1 flags creates mbtiles files with zombie points. We will manually rename/remove the files
+                # to avoid this.
+                command = f"tippecanoe -zg -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}_new.mbtiles -l {source[0]} {source[1]} -b0 -r1  --drop-densest-as-needed"
+
+                print(command)
+                result = subprocess.run(command, shell=True, capture_output=True, check=True)
+                print(result.stdout)
+                print(result.stderr)
+
+                # Remove the old mbtiles
+                if os.path.isfile(f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles"):
+                    os.remove(f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles")
+
+                # Rename the new one
+                os.rename(f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}_new.mbtiles", f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles")
 
 
-	print(command)
-	result = subprocess.run(command, shell=True, capture_output=True, check=True)
-	print(result.stdout)
-	print(reuslt.stderr)
+        else:
+                command = f"tippecanoe -zg --force -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles -l {source[0]} {source[1]} -b0 --drop-densest-as-needed"
+
+
+                print(command)
+                result = subprocess.run(command, shell=True, capture_output=True, check=True)
+                print(result.stdout)
+                print(result.stderr)
 
 
 def upload(source):
-	'''
-	Usa a API de uploads do InfoAmazônia para
-	enviar os arquivos .mbtiles recém criados
-	para o Mapbox Studio.
+        '''
+        Usa a API de uploads do InfoAmazônia para
+        enviar os arquivos .mbtiles recém criados
+        para o Mapbox Studio.
 
-	Parâmetros:
+        Parâmetros:
 
-	> source: o caminho do arquivo que deve ser enviado
+        > source: o caminho do arquivo que deve ser enviado
 
-	> tileset: o tileset que deve ser criado ou atualizado
-	'''
+        > tileset: o tileset que deve ser criado ou atualizado
+        '''
 
-	command = [f"{CONDA_PREFIX}/bin/mapbox", "upload", f"{USERNAME}.{source[0]}", f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles"]
+        command = [f"{CONDA_PREFIX}/bin/mapbox", "upload", f"{USERNAME}.{source[0]}", f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles"]
 
-	print(command)
-	result = subprocess.run(command, env={"MAPBOX_ACCESS_TOKEN": TOKEN}, capture_output=True, check=True)
-	print(result.stdout)
-	print(reuslt.stderr)
-
-
-
+        print(command)
+        result = subprocess.run(command, env={"MAPBOX_ACCESS_TOKEN": TOKEN}, capture_output=True, check=True)
+        print(result.stdout)
+        print(result.stderr)
 
 
 
@@ -110,15 +123,14 @@ def upload(source):
 
 def main():
 
-	directory = "../output/mbtiles/tilesets"
-	if not os.path.exists(directory):
-		os.makedirs(directory)
+        directory = "../output/mbtiles/tilesets"
+        if not os.path.exists(directory):
+                os.makedirs(directory)
 
-	for source in SOURCES:
-		tippecanoe(source)
-		upload(source)
-	
+        for source in SOURCES:
+                tippecanoe(source)
+                upload(source)
+
 
 if __name__ == "__main__":
-	main()
-
+        main()
