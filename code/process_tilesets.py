@@ -30,6 +30,8 @@ PROJECT_ROOT = dirname(abspath(dirname(__file__)))
 
 CONDA_PREFIX = os.environ["CONDA_PREFIX"] # path to the environment-specific utilities
 
+TIPPECANOE_PATH = abspath("/home/tippecanoe/tippecanoe")
+
 TOKEN = mapbox_credentials.token
 
 USERNAME = "infoamazonia"
@@ -70,7 +72,7 @@ def tippecanoe(source):
         if source[0] in ["amzsufocada-24h-tis", "amzsufocada-24h-ucs", "amzsufocada-23h-ti-most-fire", "amzsufocada-24h-ucs-most-fire"]:
                 # Due to a weird bug, combining the --force and -r1 flags creates mbtiles files with zombie points. We will manually rename/remove the files
                 # to avoid this.
-                command = f"tippecanoe -zg -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}_new.mbtiles -l {source[0]} {source[1]} -b0 -r1  --drop-densest-as-needed"
+                command = f"{TIPPECANOE_PATH} -zg -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}_new.mbtiles -l {source[0]} {source[1]} -b0 -r1  --drop-densest-as-needed"
 
                 print(command)
                 result = subprocess.run(command, shell=True, capture_output=True, check=True)
@@ -86,7 +88,7 @@ def tippecanoe(source):
 
 
         else:
-                command = f"tippecanoe -zg --force -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles -l {source[0]} {source[1]} -b0 --drop-densest-as-needed"
+                command = f"{TIPPECANOE_PATH} -zg --force -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles -l {source[0]} {source[1]} -b0 --drop-densest-as-needed"
 
 
                 print(command)

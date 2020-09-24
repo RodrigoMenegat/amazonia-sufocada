@@ -1,95 +1,95 @@
 {
-    "total_focos_amazonia_legal_2020": 797134,
+    "total_focos_amazonia_legal_2020": 807205,
     "terras_indigenas": {
-        "total_focos_24h": 337,
-        "areas_com_fogo_24h": 48,
+        "total_focos_24h": 709,
+        "areas_com_fogo_24h": 64,
         "areas_mais_fogo_24h": {
             "1": {
-                "id": 3002.0,
-                "nome": "Apyterewa",
-                "n_focos": 61,
-                "porcentagem": 18,
-                "dias_consecutivos": 25
+                "id": 17001.0,
+                "nome": "Inawebohona",
+                "n_focos": 91,
+                "porcentagem": 13,
+                "dias_consecutivos": 2
             },
             "2": {
-                "id": 33501.0,
-                "nome": "Parque do Araguaia",
-                "n_focos": 38,
-                "porcentagem": 11,
-                "dias_consecutivos": 0
+                "id": 3002.0,
+                "nome": "Apyterewa",
+                "n_focos": 71,
+                "porcentagem": 10,
+                "dias_consecutivos": 26
             },
             "3": {
-                "id": 40801.0,
-                "nome": "Sagarana",
-                "n_focos": 32,
-                "porcentagem": 9,
-                "dias_consecutivos": 0
+                "id": 35301.0,
+                "nome": "Pimentel Barbosa",
+                "n_focos": 45,
+                "porcentagem": 6,
+                "dias_consecutivos": 1
             }
         },
         "areas_fogo_mais_dias": {
             "1": {
-                "id": "3002",
-                "nome": "Apyterewa",
-                "dias_consecutivos": 25,
+                "id": "33501",
+                "nome": "Parque do Araguaia",
+                "dias_consecutivos": 30,
                 "is_draw": false
             },
             "2": {
-                "id": "46201",
-                "nome": "Trincheira Bacaja",
-                "dias_consecutivos": 21,
+                "id": "23301",
+                "nome": "Kraolandia",
+                "dias_consecutivos": 29,
                 "is_draw": false
             },
             "3": {
-                "id": "7601",
-                "nome": "Cachoeira Seca",
-                "dias_consecutivos": 14,
+                "id": "3002",
+                "nome": "Apyterewa",
+                "dias_consecutivos": 26,
                 "is_draw": false
             }
         }
     },
     "unidades_de_conservacao": {
-        "total_focos_24h": 498,
-        "areas_com_fogo_24h": 46,
+        "total_focos_24h": 1034,
+        "areas_com_fogo_24h": 61,
         "areas_mais_fogo_24h": {
             "1": {
                 "id": "31775",
                 "nome": "Res. Ext. Chico Mendes",
-                "n_focos": 68,
-                "porcentagem": 14,
-                "dias_consecutivos": 2
+                "n_focos": 277,
+                "porcentagem": 27,
+                "dias_consecutivos": 3
             },
             "2": {
-                "id": "42cdf767ba3246ceafca9f29273123fc",
-                "nome": "Res. Ext. Rio Caut\u00e1rio",
-                "n_focos": 60,
-                "porcentagem": 12,
-                "dias_consecutivos": 2
+                "id": "351900",
+                "nome": "APA Ilha do Bananal/Cant\u00e3o",
+                "n_focos": 105,
+                "porcentagem": 10,
+                "dias_consecutivos": 51
             },
             "3": {
-                "id": "5125",
-                "nome": "Est. Eco. da Serra das Araras",
-                "n_focos": 52,
-                "porcentagem": 10,
-                "dias_consecutivos": 3
+                "id": "58",
+                "nome": "Pq. Nac. do Araguaia",
+                "n_focos": 92,
+                "porcentagem": 9,
+                "dias_consecutivos": 20
             }
         },
         "areas_fogo_mais_dias": {
             "1": {
                 "id": "0f51f49722d045469881cd13f05e1c39",
                 "nome": "APA Triunfo do Xingu",
-                "dias_consecutivos": 77,
+                "dias_consecutivos": 78,
                 "is_draw": false
             },
             "2": {
                 "id": "5909c83daaac47579e358c9fe6fe731a",
                 "nome": "APA do Arquip\u00e9lago do Maraj\u00f3",
-                "dias_consecutivos": 76,
+                "dias_consecutivos": 77,
                 "is_draw": false
             },
             "3": {
                 "id": "351900",
                 "nome": "APA Ilha do Bananal/Cant\u00e3o",
-                "dias_consecutivos": 50,
+                "dias_consecutivos": 51,
                 "is_draw": false
             }
         }
