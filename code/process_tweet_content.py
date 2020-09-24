@@ -80,20 +80,20 @@ def build_thread_most_fire_indigenous_land(data):
     
     # Abertura
     tweet = {
-        "text": (f"Olá! Hoje, dia {day}, o robô do InfoAmazonia detectou {a} terras indígenas da Amazônia Legal com fogo ativo nas últimas 24h. Veja mais informações no fio 👇"),
+        "text": (f"Olá! Hoje, {day}, nossa análise detectou {a} terras indígenas da Amazônia Legal com fogo ativo nas últimas 24h. Veja mais informações no fio 👇"),
         "img": None
     }
     tweets.append(tweet)
     
     # Chamada para imagem retirada da API do Mapbox.
     tweet = {
-        "text": (f"Este mapa mostra todos os focos de calor em terras indígenas no dia {day}. Cada ponto representa uma área de 375 metros quadrados em que há atividade de fogo. As áreas escuras são os {a} territórios onde foram registados focos."),
+        "text": (f"Este mapa mostra todos os focos de calor em terras indígenas em {day}. As áreas escuras são as {a} terras indígenas onde foram registrados os focos. Cada ponto representa uma área de 375 m² em que o satélite detectou  atividade de fogo."),
         "img": "../output/imgs/tweets/ti_24h_todos_os_focos.jpg"
     }
     tweets.append(tweet)
     
     # Destaca a terra indígena com mais focos de fogo nas últimas 24h.
-    tweet = { "text": f"A situação mais crítica acontece na Terra Indígena {b}, cujos {c} focos de calor representam {d}% do total rgistrado em terras indígenas nas últimas 24h. Além disso, lá existem áreas com fogo há {e} dias consecutivos. Veja no mapa.",
+    tweet = { "text": f"A situação mais crítica acontece na Terra Indígena {b}, cujos {c} focos de calor representam {d}% do total registrado em terras indígenas nas últimas 24h. Além disso, lá existem áreas com fogo há {e} dias consecutivos. Veja no mapa.",
          "img": "../output/imgs/tweets/ti_24h_local_mais_focos.jpg"
     }
     tweets.append(tweet)
@@ -108,13 +108,13 @@ def build_thread_most_fire_indigenous_land(data):
     tweets.append(tweet)
     
     
-    tweet = { "text": f"Atenção para a metodologia! A análise usa dados do satélite SUOMI-NPP, da NASA, que não é o mesmo que o INPE usa como referência. Cada um dos {total_fogo} focos mostrados representa uma área de 375 m² com brilho e calor compatíveis com atividade de fogo.",
+    tweet = { "text": f"Atenção para a metodologia! Nossa análise usa dados do satélite S-NPP, da NASA, que não é o mesmo que o INPE usa como referência desde 2002. Cada um dos {total_fogo} focos mostrados representa uma área de 375 m² com brilho e calor compatíveis com atividade de fogo.",
          "img": None
     }
     tweets.append(tweet)
     
 
-    tweet = { "text": f"Você pode ver detalhes sobre a situação da Amazônia Legal na página do Amazônia Sufocada, no site do InfoAmazonia, e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2020. \n\nhttps://infoamazonia.org/",
+    tweet = { "text": f"Você pode ver detalhes sobre a situação da Amazônia Legal na página especial do Amazônia Sufocada e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2020. \n\nhttps://infoamazonia.org/projects/portugues-amazonia-sufocada",
          "img": None
     }
     tweets.append(tweet)
@@ -122,7 +122,7 @@ def build_thread_most_fire_indigenous_land(data):
 
     # Não podemos aceitar nenhum tuíte com mais de 280 toques
     tweets_over_280_chars = [len(tweet["text"]) >= 280 for tweet in tweets]
-    #print(tweets_over_280_chars)
+    print(tweets_over_280_chars)
     assert not any(tweets_over_280_chars), "tuítes acima do limite de caracteres detectados"
 
     return tweets
@@ -167,21 +167,21 @@ def build_thread_most_fire_conservation_units(data):
     
     # Abertura
     tweet = {
-        "text": (f"Oi! O InfoAmazonia consultou imagens de satélite e descobriu que há {a} áreas de proteção na Amazônia Legal com focos de fogo registrados no último dia, {day}. Mais detalhes no fio 👇"),
+        "text": (f"Oi! Nossa análise descobriu que há {a} áreas de proteção na Amazônia Legal com fogo ativo no último dia, {day}. Mais detalhes no fio 👇"),
         "img": None
     }
     tweets.append(tweet)
     
     # Chamada para imagem retirada da API do Mapbox.
     tweet = {
-        "text": (f"No mapa abaixo, as áreas mais escuras são unidades de conservação com focos de fogo no dia {day}. Cada ponto representa 375 metros quadrados em que o satélite detectou atividade de fogo."),
+        "text": (f"No mapa abaixo, as áreas verdes são unidades de conservação com focos de calor em {day}. Cada ponto representa 375 m² em que o satélite detectou atividade de fogo."),
         "img": "../output/imgs/tweets/uc_24h_todos_os_focos.jpg"
         
     } 
     tweets.append(tweet)
     
     # Destaca a terra indígena com mais focos de fogo nas últimas 24h.
-    tweet = { "text": f"Nas últimas 24h, a maior quantidade de focos aconteceu no local {b}, que teve {c} pontos de fogo ({d}% do total). Essa reserva está queimando há {d} dias. Veja no mapa:",
+    tweet = { "text": f"Nas últimas 24h, a maior quantidade de focos aconteceu na unidade {b}, que teve {c} pontos de fogo ({d}% do total). Essa área está queimando há {d} dias. Veja no mapa:",
 
          "img": "../output/imgs/tweets/uc_24h_local_mais_focos.jpg"
 
@@ -200,13 +200,13 @@ def build_thread_most_fire_conservation_units(data):
     tweets.append(tweet)
     
     
-    tweet = { "text": f"Atenção para a metodologia! A análise usa dados do satélite SUOMI-NPP, da NASA, que não é o mesmo que o INPE usa como referência. Cada um dos {total_fogo} focos mostrados representa uma área de 375 m² em que o satélite encontrou brilho e calor compatíveis com atividade de fogo.",
+    tweet = { "text": f"Atenção para a metodologia! A análise usa dados do satélite S-NPP, da NASA, que tem mais resolução que a referência utilizada pelo Inpe e capta maior número de focos. Cada um dos {total_fogo} focos mostrados representa uma área de 375m² que pode conter várias ou uma única frente de fogo.",
          "img": None
     }
     tweets.append(tweet)
     
 
-    tweet = { "text": f"Você pode ver mais detalhes sobre a situação da Amazônia Legal na página especial Amazônia Sufocada, no site do InfoAmazonia, e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2020. \n\nhttps://infoamazonia.org/",
+    tweet = { "text": f"Você pode ver mais detalhes sobre a situação da Amazônia Legal na página especial Amazônia Sufocada e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2020. \n\nhttps://infoamazonia.org/projects/portugues-amazonia-sufocada",
          "img": None
     }
     tweets.append(tweet)
@@ -214,7 +214,7 @@ def build_thread_most_fire_conservation_units(data):
 
     # Não podemos aceitar nenhum tuíte com mais de 280 toques
     tweets_over_280_chars = [len(tweet["text"]) >= 280 for tweet in tweets]
-    #print(tweets_over_280_chars)
+    print(tweets_over_280_chars)
     assert not any(tweets_over_280_chars), "tuítes acima do limite de caracteres detectados"
     
     return tweets
