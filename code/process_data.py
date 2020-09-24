@@ -452,8 +452,8 @@ def update_land_datasets(df_24h, df_7d, full_db):
 
     # Essas são as agregações temporais que faremos
     # e seus respectivos dataframes
-    labels = ["24h", "7d", "db_completo"]
-    dfs = [df_24h, df_7d, full_db]
+    labels = ["db_completo", "7d", "24h"]
+    dfs = [full_db, df_7d, df_24h]
 
     for column in columns:
 
@@ -475,7 +475,7 @@ def update_land_datasets(df_24h, df_7d, full_db):
         gpbys.append(gpby)
 
         # Reúne os dados do array usando reduce
-        gpby = reduce(lambda a,b: pd.merge(a,b,on=column), gpbys)
+        gpby = reduce(lambda a,b: pd.merge(a,b,on=column, how='left'), gpbys)
     
         # Reúne os dados com o banco de dados original e salva em vários formatos
         if column == "cod_ti":
