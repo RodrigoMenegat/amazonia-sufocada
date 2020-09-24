@@ -307,7 +307,7 @@ def featherize_sources():
     ind_lands = ind_lands[~ind_lands.fase_ti.isin(('Declarada', 'Em Estudo'))]
 
     # Adiciona campos customizados
-    ind_lands["biomes"] = con_units.apply(add_biomes, args=(biomes,), axis=1)
+    ind_lands["biomes"] = ind_lands.apply(add_biomes, args=(biomes,), axis=1)
 
     ind_lands.to_feather(f"{out_path}terras_indigenas.feather")
 
