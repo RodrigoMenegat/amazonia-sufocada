@@ -12,15 +12,31 @@ import warnings; warnings.filterwarnings('ignore', message='.*initial implementa
 gpd.options.use_pygeos = True
 
 
+###########################
+### Rename os functions ###
+### for readability     ###
+###########################
+
+abspath = os.path.abspath
+dirname = os.path.dirname
+
+
+###############
+### Globals ###
+###############
+
+PROJECT_ROOT = dirname(abspath(dirname(__file__)))
+
+
 ########################
 ### Dados constantes ###
 ########################
 
-CITIES = gpd.read_feather("../output/feathers/sources/cidades_amazonia_legal.feather")
-CONSERVATION_UNITS =  gpd.read_feather("../output/feathers/sources/unidades_de_conservacao.feather")
-INDIGENOUS_LAND = gpd.read_feather("../output/feathers/sources/terras_indigenas.feather")
-LEGAL_AMAZON = gpd.read_feather("../output/feathers/sources/limites_amazonia_legal.feather")
-BIOMES = BIOMES = gpd.read_feather("../output/feathers/sources/biomas_amazonia_legal.feather")
+CITIES = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/cidades_amazonia_legal.feather")
+CONSERVATION_UNITS =  gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/unidades_de_conservacao.feather")
+INDIGENOUS_LAND = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/terras_indigenas.feather")
+LEGAL_AMAZON = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/limites_amazonia_legal.feather")
+BIOMES = BIOMES = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/biomas_amazonia_legal.feather")
 
 
 ###############
@@ -337,13 +353,13 @@ def build_original_database():
     df = sanitize_duplicates(df, "bd_completo")
 
     # Salva como CSV
-    save_csv(df, "../output/csvs/tilesets/bd_completo.csv")
+    save_csv(df, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo.csv")
 
     # # Salva como Feather
-    save_feather(df, "../output/feathers/tilesets/bd_completo.feather")
+    save_feather(df,  f"{PROJECT_ROOT}/output/feathers/tilesets/bd_completo.feather")
 
     # Salva como GeoJSON
-    save_geojson(df, "../output/jsons/tilesets/bd_completo.json")
+    save_geojson(df,  f"{PROJECT_ROOT}/output/jsons/tilesets/bd_completo.json")
 
     return df
 
@@ -403,13 +419,13 @@ def fetch_recent_data():
         dfs[time] = df
 
         # Salva como CSV
-        save_csv(df, f"../output/csvs/tilesets/{time}.csv")
+        save_csv(df, f"{PROJECT_ROOT}/output/csvs/tilesets/{time}.csv")
 
         # Salva como Feather
-        save_feather(df, f"../output/feathers/tilesets/{time}.feather")
+        save_feather(df, f"{PROJECT_ROOT}/output/feathers/tilesets/{time}.feather")
 
         # Salva como GeoJSON
-        save_geojson(df, f"../output/jsons/tilesets/{time}.json")
+        save_geojson(df, f"{PROJECT_ROOT}/output/jsons/tilesets/{time}.json")
 
     # Retorna os dataframes para usar no resto dos processos
     return dfs["24h"], dfs["7d"]
@@ -424,7 +440,7 @@ def update_original_database(new_data):
 
 
     # Lê o banco de dados original em formato feather
-    gdf = gpd.read_feather("../output/feathers/tilesets/bd_completo.feather")
+    gdf = gpd.read_feather( f"{PROJECT_ROOT}/output/feathers/tilesets/bd_completo.feather")
 
     # Concatena com os novos dados
     gdf = pd.concat((gdf, new_data))
@@ -432,13 +448,13 @@ def update_original_database(new_data):
     gdf = gdf.reset_index(drop=True)
 
     # Salva como CSV
-    save_csv(gdf, "../output/csvs/tilesets/bd_completo.csv")
+    save_csv(gdf, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo.csv")
 
     # Salva como Feather
-    save_feather(gdf, "../output/feathers/tilesets/bd_completo.feather")
+    save_feather(gdf, f"{PROJECT_ROOT}/output/feathers/tilesets/bd_completo.feather")
 
     # Salva como GeoJSON
-    save_geojson(gdf, "../output/jsons/tilesets/bd_completo.json")
+    save_geojson(gdf, f"{PROJECT_ROOT}/output/jsons/tilesets/bd_completo.json")
 
     return gdf
 
@@ -482,25 +498,25 @@ def update_land_datasets(df_24h, df_7d, full_db):
             
             gpby = INDIGENOUS_LAND.merge(gpby, on=column, how="left")
             
-            save_feather(gpby, "../output/feathers/land_info/terras_indigenas.feather")
-            save_csv(gpby, "../output/csvs/land_info/terras_indigenas.csv")
-            save_geojson(gpby, "../output/jsons/land_info/terras_indigenas.json")
+            save_feather(gpby, f"{PROJECT_ROOT}/output/feathers/land_info/terras_indigenas.feather")
+            save_csv(gpby, f"{PROJECT_ROOT}/output/csvs/land_info/terras_indigenas.csv")
+            save_geojson(gpby, f"{PROJECT_ROOT}/output/jsons/land_info/terras_indigenas.json")
         
         elif column == "cod_uc":
             
             gpby = CONSERVATION_UNITS.merge(gpby, on=column, how="left")
             
-            save_feather(gpby, "../output/feathers/land_info/unidades_de_conservacao.feather")
-            save_csv(gpby, "../output/csvs/land_info/unidades_de_conservacao.csv")
-            save_geojson(gpby, "../output/jsons/land_info/unidades_de_conservacao.json")
+            save_feather(gpby, f"{PROJECT_ROOT}/output/feathers/land_info/unidades_de_conservacao.feather")
+            save_csv(gpby, f"{PROJECT_ROOT}/output/csvs/land_info/unidades_de_conservacao.csv")
+            save_geojson(gpby, f"{PROJECT_ROOT}/output/jsons/land_info/unidades_de_conservacao.json")
             
         elif column == "cod_bioma":
             
             gpby = BIOMES.merge(gpby, on=column, how="left")
 
-            save_feather(gpby, "../output/feathers/land_info/biomas.feather")
-            save_csv(gpby, "../output/csvs/land_info/biomas.csv")
-            save_geojson(gpby, "../output/jsons/land_info/biomas.json")
+            save_feather(gpby, f"{PROJECT_ROOT}/output/feathers/land_info/biomas.feather")
+            save_csv(gpby, f"{PROJECT_ROOT}/output/csvs/land_info/biomas.csv")
+            save_geojson(gpby, f"{PROJECT_ROOT}/output/jsons/land_info/biomas.json")
 
 
 #################
@@ -524,13 +540,13 @@ def main(argv):
     
     # Cria um backup para manter os dados sempre ativos
     print("> Backuping data")
-    copy_tree("../output/", "../output_bkp")
+    copy_tree(f"{PROJECT_ROOT}/output/", f"{PROJECT_ROOT}/output_bkp")
    
     # Atualiza o banco de dados, sabendo que uma enormidade de coisas podem dar errado (conexão, por exemplo)
     try:
         
         # Caso o banco de dados completo não exista, cria.
-        db_path = "../output/csvs/tilesets/bd_completo.csv"
+        db_path = f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo.csv"
 
         db_exists = os.path.isfile(db_path)
         if not db_exists:
@@ -555,7 +571,7 @@ def main(argv):
         print(f"Exception {e} detected. Restoring files to previous state")
         
         # Se quebrar, podemos colocar o backup de volta no diretório de dados
-        copy_tree("../output_bkp", "../output/")
+        copy_tree(f"{PROJECT_ROOT}/output_bkp", f"{PROJECT_ROOT}/output/")
 
 
 if __name__ == "__main__":

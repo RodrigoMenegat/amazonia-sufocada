@@ -4,29 +4,42 @@ os tweets que serão publicados no robô monitor do InfoAmazônia.
 Elas são salvas em formato JSON para que sejam lidas posteriormente
 pelo script que faz a publicação no Twitter.
 '''
-
 import pandas as pd
 import geopandas as gpd
 import json
 from pprint import pprint
 
+###########################
+### Rename os functions ###
+### for readability     ###
+###########################
+
+abspath = os.path.abspath
+dirname = os.path.dirname
+
+###############
+### Globals ###
+###############
+
+PROJECT_ROOT = dirname(abspath(dirname(__file__)))
+
 ######################
 ### DATA CONSTANTS ###
 ######################
 
-DF_24H = gpd.read_feather("../output/feathers/tilesets/24h.feather")
-DF_7D = gpd.read_feather("../output/feathers/tilesets/7d.feather")
-DF_FULL = gpd.read_feather("../output/feathers/tilesets/bd_completo.feather")
+DF_24H = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/tilesets/24h.feather")
+DF_7D = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/tilesets/7d.feather")
+DF_FULL = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/tilesets/bd_completo.feather")
 
-CONSERVATION_UNITS_FIRE_DATA = gpd.read_feather("../output/feathers/land_info/unidades_de_conservacao.feather")
-INDIGENOUS_LAND_FIRE_DATA = gpd.read_feather("../output/feathers/land_info/terras_indigenas.feather")
-BIOMES_FIRE_DATA = gpd.read_feather("../output/feathers/land_info/biomas.feather")
+CONSERVATION_UNITS_FIRE_DATA = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/land_info/unidades_de_conservacao.feather")
+INDIGENOUS_LAND_FIRE_DATA = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/land_info/terras_indigenas.feather")
+BIOMES_FIRE_DATA = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/land_info/biomas.feather")
 
-CITIES = gpd.read_feather("../output/feathers/sources/cidades_amazonia_legal.feather")
-CONSERVATION_UNITS =  gpd.read_feather("../output/feathers/sources/unidades_de_conservacao.feather")
-INDIGENOUS_LAND = gpd.read_feather("../output/feathers/sources/terras_indigenas.feather")
-LEGAL_AMAZON = gpd.read_feather("../output/feathers/sources/limites_amazonia_legal.feather")
-BIOMES = gpd.read_feather("../output/feathers/sources/biomas_amazonia_legal.feather")
+CITIES = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/cidades_amazonia_legal.feather")
+CONSERVATION_UNITS =  gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/unidades_de_conservacao.feather")
+INDIGENOUS_LAND = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/terras_indigenas.feather")
+LEGAL_AMAZON = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/limites_amazonia_legal.feather")
+BIOMES = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/biomas_amazonia_legal.feather")
 
 ###############
 ### Helpers ###
@@ -278,7 +291,7 @@ def find_values():
 def main():
 
 	data = find_values()
-	with open("../output/jsons/alerts/24h.json", "w+") as f:
+	with open(f"{PROJECT_ROOT}/output/jsons/alerts/24h.json", "w+") as f:
 		json.dump(data, f, indent=4)
 
 

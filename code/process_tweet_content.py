@@ -9,6 +9,22 @@ import json
 import os
 
 
+###########################
+### Rename os functions ###
+### for readability     ###
+###########################
+
+abspath = os.path.abspath
+dirname = os.path.dirname
+
+
+###############
+### Globals ###
+###############
+
+PROJECT_ROOT = dirname(abspath(dirname(__file__)))
+
+
 ###############
 ### Helpers ###
 ###############
@@ -25,7 +41,7 @@ def read_variables(time):
     '24h' ou '7d'.
     '''
 
-    with open(f"../output/jsons/alerts/{time}.json") as f:
+    with open(f"{PROJECT_ROOT}/output/jsons/alerts/{time}.json") as f:
         data = json.load(f)
 
     return data
@@ -175,7 +191,7 @@ def build_thread_most_fire_conservation_units(data):
     # Chamada para imagem retirada da API do Mapbox.
     tweet = {
         "text": (f"No mapa abaixo, as áreas verdes são unidades de conservação com focos de calor em {day}. Cada ponto representa 375 m² em que o satélite detectou atividade de fogo."),
-        "img": "../output/imgs/tweets/uc_24h_todos_os_focos.jpg"
+        "img": f"{PROJECT_ROOT}/output/imgs/tweets/uc_24h_todos_os_focos.jpg"
         
     } 
     tweets.append(tweet)
@@ -183,7 +199,7 @@ def build_thread_most_fire_conservation_units(data):
     # Destaca a terra indígena com mais focos de fogo nas últimas 24h.
     tweet = { "text": f"Nas últimas 24h, a maior quantidade de focos aconteceu na unidade {b}, que teve {c} pontos de fogo ({d}% do total). Essa área está queimando há {d} dias. Veja no mapa:",
 
-         "img": "../output/imgs/tweets/uc_24h_local_mais_focos.jpg"
+         "img": f"{PROJECT_ROOT}/output/imgs/tweets/uc_24h_local_mais_focos.jpg"
 
     }
     tweets.append(tweet)
@@ -229,17 +245,17 @@ def main():
 	data_24h = read_variables("24h")
 
 	# Verifica se o diretório de tweets de fato existe
-	directory = "../output/jsons/tweets/"
+	directory = f"{PROJECT_ROOT}/output/jsons/tweets/"
 	if not os.path.exists(directory):
 		os.makedirs(directory)
 
 	# Terras indígenas, 24h
-	with open("../output/jsons/tweets/tis_24h.json", "w+") as f:
+	with open(f"{PROJECT_ROOT}/output/jsons/tweets/tis_24h.json", "w+") as f:
 		content = build_thread_most_fire_indigenous_land(data_24h)
 		json.dump(content, f, indent=2)
 
 	# Unidades de conservação, 24h
-	with open("../output/jsons/tweets/ucs_24h.json", "w+") as f:
+	with open(f"{PROJECT_ROOT}/output/jsons/tweets/ucs_24h.json", "w+") as f:
 		content = build_thread_most_fire_conservation_units(data_24h)
 		json.dump(content, f, indent=2)
 

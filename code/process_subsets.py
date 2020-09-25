@@ -7,6 +7,21 @@ estar visíveis ao mesmo tempo para evitar dissonância na mensagem.
 
 import geopandas as gpd
 
+###########################
+### Rename os functions ###
+### for readability     ###
+###########################
+
+abspath = os.path.abspath
+dirname = os.path.dirname
+
+
+###############
+### Globals ###
+###############
+
+PROJECT_ROOT = dirname(abspath(dirname(__file__)))
+
 
 ###############
 ### Helpers ###
@@ -45,7 +60,7 @@ def find_place_with_most_fire(df, code, position=1):
 def main():
 	
 	# Lê os dados necessários
-	points_24h = gpd.read_feather("../output/feathers/tilesets/24h.feather")
+	points_24h = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/tilesets/24h.feather")
 
 	# Salva os recortes
 	inside_ucs = points_24h[~points_24h.cod_uc.isna()]
@@ -59,10 +74,10 @@ def main():
 	uc_most_fire = points_24h[points_24h.cod_uc == uc_most_fire_id]
 
 	# Save it 
-	inside_tis.to_file("../output/jsons/tilesets/24h_tis.json", driver="GeoJSON")
-	inside_ucs.to_file("../output/jsons/tilesets/24h_ucs.json", driver="GeoJSON")
-	uc_most_fire.to_file("../output/jsons/tilesets/24h_uc_most_fire.json", driver="GeoJSON")
-	ti_most_fire.to_file("../output/jsons/tilesets/24h_ti_most_fire.json", driver="GeoJSON")
+	inside_tis.to_file(f"{PROJECT_ROOT}/output/jsons/tilesets/24h_tis.json", driver="GeoJSON")
+	inside_ucs.to_file(f"{PROJECT_ROOT}/output/jsons/tilesets/24h_ucs.json", driver="GeoJSON")
+	uc_most_fire.to_file(f"{PROJECT_ROOT}/output/jsons/tilesets/24h_uc_most_fire.json", driver="GeoJSON")
+	ti_most_fire.to_file(f"{PROJECT_ROOT}/output/jsons/tilesets/24h_ti_most_fire.json", driver="GeoJSON")
 
 
 if __name__ == "__main__":
