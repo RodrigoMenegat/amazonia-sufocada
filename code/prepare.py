@@ -15,6 +15,21 @@ import warnings
 warnings.filterwarnings('ignore', message='.*initial implementation of Parquet.*') # Aviso de versão inicial do feather
 
 
+###########################
+### Rename os functions ###
+### for readability     ###
+###########################
+
+abspath = os.path.abspath
+dirname = os.path.dirname
+
+
+###############
+### Globals ###
+###############
+
+PROJECT_ROOT = dirname(abspath(dirname(__file__)))
+
 ###############
 ### Helpers ###
 ###############
@@ -187,8 +202,8 @@ def featherize_sources():
     ### Detalhes sobre diretório de entrada e saída ###
     ###################################################
 
-    in_path = "../input/"
-    out_path = "../output/feathers/sources/"
+    in_path = abspath(f"{PROJECT_ROOT}/input/")
+    out_path = abspath(f"{PROJECT_ROOT}/output/feathers/sources/")
 
     #################     
     ### Satélites ###
@@ -196,15 +211,15 @@ def featherize_sources():
 
     dtype = {"acq_time": str, "acq_date": str}
 
-    archive = pd.read_csv(f"{in_path}FIRMS_VIIRS_2020/fire_archive.csv", dtype=dtype)
-    archive.to_feather(f"{out_path}fire_archive.feather")
+    archive = pd.read_csv(f"{in_path}/FIRMS_VIIRS_2020/fire_archive.csv", dtype=dtype)
+    archive.to_feather(f"{out_path}/fire_archive.feather")
 
-    nrt = pd.read_csv(f"{in_path}FIRMS_VIIRS_2020/fire_nrt.csv", dtype=dtype)
-    nrt.to_feather(f"{out_path}fire_nrt.feather")
+    nrt = pd.read_csv(f"{in_path}/FIRMS_VIIRS_2020/fire_nrt.csv", dtype=dtype)
+    nrt.to_feather(f"{out_path}/fire_nrt.feather")
 
     # Limites da Amazônia Legal
-    legal_amazon = gpd.read_file(f"{in_path}limites_amazonia_legal")
-    legal_amazon.to_feather(f"{out_path}limites_amazonia_legal.feather")
+    legal_amazon = gpd.read_file(f"{in_path}/limites_amazonia_legal")
+    legal_amazon.to_feather(f"{out_path}/limites_amazonia_legal.feather")
 
     # Salva os limites para cortar outros bancos estáticos
     amz_outline = legal_amazon.unary_union 
@@ -214,7 +229,7 @@ def featherize_sources():
     ### Cidades ###
     ###############
 
-    cities = gpd.read_file(f"{in_path}cidades_amazonia_legal/")
+    cities = gpd.read_file(f"{in_path}/cidades_amazonia_legal/")
 
     columns = {
         "CD_MUN": "cod_cidade",
@@ -230,14 +245,14 @@ def featherize_sources():
     # Remove duplicatas existentes
     cities = cities.drop_duplicates()
 
-    cities.to_feather(f"{out_path}cidades_amazonia_legal.feather")
+    cities.to_feather(f"{out_path}/cidades_amazonia_legal.feather")
 
 
     ##############
     ### Biomas ###
     ##############
 
-    biomes = gpd.read_file(f"{in_path}biomas_amazonia_legal")
+    biomes = gpd.read_file(f"{in_path}/biomas_amazonia_legal")
 
     # Remove colunas
     biomes = biomes[["NOM_BIOMA", "ID1", "geometry"]]
@@ -260,7 +275,7 @@ def featherize_sources():
     ### Unidades de conservação ###
     ###############################
 
-    con_units = gpd.read_file(f"{in_path}unidades_de_conservacao", encoding='utf8')
+    con_units = gpd.read_file(f"{in_path}/unidades_de_conservacao", encoding='utf8')
 
     columns = {
         "NOME_UC1": "nome_uc",
@@ -287,7 +302,7 @@ def featherize_sources():
     ### Terras indígenas ###
     ########################
 
-    ind_lands = gpd.read_file(f"{in_path}terras_indigenas/")
+    ind_lands = gpd.read_file(f"{in_path}/terras_indigenas/")
 
     columns = {
         "terrai_cod": "cod_ti",
@@ -309,7 +324,7 @@ def featherize_sources():
     # Adiciona campos customizados
     ind_lands["biomes"] = ind_lands.apply(add_biomes, args=(biomes,), axis=1)
 
-    ind_lands.to_feather(f"{out_path}terras_indigenas.feather")
+    ind_lands.to_feather(f"{out_path}/terras_indigenas.feather")
 
 
 def main():

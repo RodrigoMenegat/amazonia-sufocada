@@ -127,7 +127,7 @@ def upload(source):
 
 def main():
 
-        directory = "../output/mbtiles/tilesets"
+        directory = f"{PROJECT_ROOT}/output/mbtiles/tilesets"
         if not os.path.exists(directory):
                 os.makedirs(directory)
 

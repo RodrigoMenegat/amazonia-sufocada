@@ -11,12 +11,27 @@ import re
 import requests
 import shutil
 
+
+###########################
+### Rename os functions ###
+### for readability     ###
+###########################
+
+abspath = os.path.abspath
+dirname = os.path.dirname
+
+###############
+### Globals ###
+###############
+
+PROJECT_ROOT = dirname(abspath(dirname(__file__)))
+
 ##################################
 ### Dados sobre fogo por terra ###
 ##################################
 
-TIS_INFO = gpd.read_feather("../output/feathers/land_info/terras_indigenas.feather")
-UCS_INFO = gpd.read_feather("../output/feathers/land_info/unidades_de_conservacao.feather")
+TIS_INFO = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/land_info/terras_indigenas.feather")
+UCS_INFO = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/land_info/unidades_de_conservacao.feather")
 
 #######################
 ### Token de acesso ###
@@ -24,7 +39,6 @@ UCS_INFO = gpd.read_feather("../output/feathers/land_info/unidades_de_conservaca
 
 TOKEN = mapbox_credentials.token
 USERNAME = "infoamazonia"
-
 
 ###############
 ### Helpers ###
@@ -45,7 +59,7 @@ def handle_cache(url, style_id):
     > style_id: o id do estilo do Mapbox para o qual queremos gerar uma imagem estática
     '''
 
-    file = f"../output/jsons/requests/last-request-{style_id}.json"
+    file = f"{PROJECT_ROOT}/output/jsons/requests/last-request-{style_id}.json"
     
     # Essa condição só sera ativada na primeira execução do script
     if not os.path.isfile(file):
@@ -78,7 +92,7 @@ def read_variables(time):
     '24h' ou '7d'.
     '''
 
-    with open(f"../output/jsons/alerts/{time}.json") as f:
+    with open(f"{PROJECT_ROOT}/output/jsons/alerts/{time}.json") as f:
         data = json.load(f)
 
     return data
@@ -90,7 +104,7 @@ def save_request_info(url, style_id):
     foi feita.
     '''
     
-    directory ="../output/jsons/requests"
+    directory = f"{PROJECT_ROOT}/output/jsons/requests"
     if not os.path.exists(directory):
         os.makedirs(directory)
 
@@ -190,7 +204,7 @@ def make_maps(time, land_type):
     fires.plot(color=firecolor, markersize=1, alpha=.5, ax=ax)
     ax.axis('off')
 
-    fig.savefig(f"../output/imgs/tweets/{land_type}_{time}_local_mais_focos.png", 
+    fig.savefig(f"{PROJECT_ROOT}/output/imgs/tweets/{land_type}_{time}_local_mais_focos.png", 
             facecolor=fig.get_facecolor(), 
             transparent=True, 
             bbox_inches='tight', 
@@ -298,11 +312,16 @@ def get_static_images(path, time, land_type):
         "ti": "ckfakmyg63j8m19lne8hkfe86"
     }
 
-    style_id = style_ids[land_type]    
+    style_id = style_ids[land_type]
+
+    if land_type == "uc":
+        layer_id = "ucs"
+    elif land_type == "ti":
+        layer_id == "ti"    
 
 
     # Constrói a URL
-    url =f"https://api.mapbox.com/styles/v1/{USERNAME}/{style_id}/static/geojson({overlay})/auto/800x800@2x?access_token={TOKEN}&before_layer=amzsufocada-24h-{land_type}-most-fire"
+    url =f"https://api.mapbox.com/styles/v1/{USERNAME}/{style_id}/static/geojson({overlay})/auto/800x800@2x?access_token={TOKEN}&before_layer=amzsufocada-24h-{layer_id}-most-fire"
     url = handle_cache(url, style_id)
     save_request_info(url, style_id)
     print(url)
@@ -331,7 +350,7 @@ def main():
     
     for time in times:
         for land_type in land_types:
-            path = f"../output/imgs/tweets/"
+            path = f"{PROJECT_ROOT}/output/imgs/tweets/"
             get_static_images(path, time, land_type)
 
 if __name__ == "__main__":
