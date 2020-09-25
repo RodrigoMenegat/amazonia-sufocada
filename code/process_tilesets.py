@@ -1,14 +1,16 @@
 '''
-Usa o Mapbox Tilling Service (MTS)
-para criar layers customizáveis
-via Mapbox Studio.
+Usa as apis do Mapbox e o Tippecanoe para
+criar styles customizáveis no Mapbox Studio.
 
 A maior parte da funcionalidade desse script
 é simplesmente um wrappper para o utilitário
-de linha de comando 'Tilesets CLI', desenvol-
-vido pela equipe do próprio Mapbox. Veja mais:
+de linha de comando 'Tilesets CLI' e do Tippecanoe, 
+desenvolvidos pela equipe do próprio Mapbox. 
+
+Veja mais:
 
 https://github.com/mapbox/tilesets-cli/
+https://github.com/RodrigoMenegat/amazonia-sufocada
 '''
 
 import mapbox_credentials
