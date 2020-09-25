@@ -1,14 +1,14 @@
 {
-    "total_focos_amazonia_legal_2020": 807205,
+    "total_focos_amazonia_legal_2020": 800689,
     "terras_indigenas": {
-        "total_focos_24h": 709,
-        "areas_com_fogo_24h": 64,
+        "total_focos_24h": 731,
+        "areas_com_fogo_24h": 74,
         "areas_mais_fogo_24h": {
             "1": {
                 "id": 17001.0,
                 "nome": "Inawebohona",
                 "n_focos": 91,
-                "porcentagem": 13,
+                "porcentagem": 12,
                 "dias_consecutivos": 2
             },
             "2": {
@@ -48,40 +48,40 @@
         }
     },
     "unidades_de_conservacao": {
-        "total_focos_24h": 1034,
-        "areas_com_fogo_24h": 61,
+        "total_focos_24h": 1109,
+        "areas_com_fogo_24h": 65,
         "areas_mais_fogo_24h": {
             "1": {
                 "id": "31775",
                 "nome": "Res. Ext. Chico Mendes",
-                "n_focos": 277,
-                "porcentagem": 27,
+                "n_focos": 328,
+                "porcentagem": 30,
                 "dias_consecutivos": 3
             },
             "2": {
                 "id": "351900",
                 "nome": "APA Ilha do Bananal/Cant\u00e3o",
                 "n_focos": 105,
-                "porcentagem": 10,
+                "porcentagem": 9,
                 "dias_consecutivos": 51
             },
             "3": {
                 "id": "58",
                 "nome": "Pq. Nac. do Araguaia",
                 "n_focos": 92,
-                "porcentagem": 9,
+                "porcentagem": 8,
                 "dias_consecutivos": 20
             }
         },
         "areas_fogo_mais_dias": {
             "1": {
-                "id": "0f51f49722d045469881cd13f05e1c39",
+                "id": "96c938f15f494065b97fa6d856df6275",
                 "nome": "APA Triunfo do Xingu",
                 "dias_consecutivos": 78,
                 "is_draw": false
             },
             "2": {
-                "id": "5909c83daaac47579e358c9fe6fe731a",
+                "id": "24f88cdcb26c44d5a1b2139d30c024c4",
                 "nome": "APA do Arquip\u00e9lago do Maraj\u00f3",
                 "dias_consecutivos": 77,
                 "is_draw": false

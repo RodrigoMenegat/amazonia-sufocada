@@ -200,7 +200,7 @@ def build_thread_most_fire_conservation_units(data):
     tweets.append(tweet)
     
     
-    tweet = { "text": f"Atenção para a metodologia! A análise usa dados do satélite S-NPP, da NASA, que tem mais resolução que a referência utilizada pelo Inpe e capta maior número de focos. Cada um dos {total_fogo} focos mostrados representa uma área de 375m² que pode conter várias ou uma única frente de fogo.",
+    tweet = { "text": f"Atenção para a metodologia! A análise usa dados do satélite S-NPP, da NASA, que tem mais resolução que a referência utilizada pelo Inpe e capta maior número de focos. Cada um dos {total_fogo} focos representa uma área de 375m² que pode conter várias ou uma única frente de fogo.",
          "img": None
     }
     tweets.append(tweet)
