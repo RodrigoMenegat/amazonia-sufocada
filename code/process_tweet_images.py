@@ -288,8 +288,8 @@ def get_static_images(path, time, land_type):
         if land_type == "ti":
 
             feature["properties"] = {
-                "fill":"%23f7a6a6",
-                "stroke": "%23FFF",
+                "fill":"%23551636",
+                "stroke": "%23702341",
                 "stroke-width": 3,
                 "fill-opacity":.5,
             }
@@ -297,8 +297,8 @@ def get_static_images(path, time, land_type):
         elif land_type == "uc":
 
             feature["properties"] = {
-                "fill":"%23fbc7ad",
-                "stroke": "%23FFF",
+                "fill":"%23195c53",
+                "stroke": "%2327867b",
                 "stroke-width": 3,
                 "fill-opacity":.5,
             }
@@ -317,7 +317,7 @@ def get_static_images(path, time, land_type):
     if land_type == "uc":
         layer_id = "ucs"
     elif land_type == "ti":
-        layer_id == "ti"    
+        layer_id = "ti"    
 
 
     # Constrói a URL
