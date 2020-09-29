@@ -197,7 +197,7 @@ def build_thread_most_fire_conservation_units(data):
     tweets.append(tweet)
     
     # Destaca a terra indígena com mais focos de fogo nas últimas 24h.
-    tweet = { "text": f"Nas últimas 24h, a maior quantidade de focos aconteceu na unidade {b}, que teve {c} pontos de fogo ({d}% do total). Essa área está queimando há {d} dias. Veja no mapa:",
+    tweet = { "text": f"Nas últimas 24h, a maior quantidade de focos aconteceu na unidade {b}, que teve {c} pontos de fogo ({d}% do total). Essa área está queimando há {e} dias. Veja no mapa:",
 
          "img": f"{PROJECT_ROOT}/output/imgs/tweets/uc_24h_local_mais_focos.jpg"
 
