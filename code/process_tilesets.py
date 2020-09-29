@@ -88,6 +88,10 @@ def tippecanoe(source):
                 # Rename the new one
                 os.rename(f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}_new.mbtiles", f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles")
 
+        elif source[0] in ["amzsufocada-terras-indigenas", "amzsufocada-unidades-conserv", "amzsufocada-biomas"]:
+                # Tippecanoe needs a buffer to avoid lines in the tile boundaries of polygons
+                command = f"{TIPPECANOE_PATH} -zg --force -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles -l {source[0]} {source[1]}  --drop-densest-as-needed"
+
 
         else:
                 command = f"{TIPPECANOE_PATH} -zg --force -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles -l {source[0]} {source[1]} -b0 --drop-densest-as-needed"
