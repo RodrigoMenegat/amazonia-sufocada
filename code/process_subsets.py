@@ -6,6 +6,7 @@ estar visíveis ao mesmo tempo para evitar dissonância na mensagem.
 '''
 
 import geopandas as gpd
+import os
 
 ###########################
 ### Rename os functions ###
