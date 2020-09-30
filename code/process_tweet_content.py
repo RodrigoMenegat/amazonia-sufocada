@@ -36,7 +36,7 @@ def read_variables(time):
     e retorna como um dicionário do Python.
 
     Parâmetros:
-​
+
     > time: O intervalo de tempo desejado. Pode ser
     '24h' ou '7d'.
     '''
@@ -103,7 +103,7 @@ def build_thread_most_fire_indigenous_land(data):
     
     # Chamada para imagem retirada da API do Mapbox.
     tweet = {
-        "text": (f"Este mapa mostra todos os focos de calor em terras indígenas em {day}. As áreas escuras são as {a} terras indígenas onde foram registrados os focos. Cada ponto representa uma área de 375 m² em que o satélite detectou  atividade de fogo."),
+        "text": (f"Este mapa mostra todos os focos de calor em terras indígenas em {day}. As áreas roxas são as {a} terras indígenas onde foram registrados os focos. Cada ponto representa uma área de 375 m² em que o satélite detectou  atividade de fogo."),
         "img": "../output/imgs/tweets/ti_24h_todos_os_focos.jpg"
     }
     tweets.append(tweet)
@@ -124,13 +124,13 @@ def build_thread_most_fire_indigenous_land(data):
     tweets.append(tweet)
     
     
-    tweet = { "text": f"Atenção para a metodologia! Nossa análise usa dados do satélite S-NPP, da NASA, que não é o mesmo que o INPE usa como referência desde 2002. Cada um dos {total_fogo} focos mostrados representa uma área de 375 m² com brilho e calor compatíveis com atividade de fogo.",
+    tweet = { "text": f"Atenção para a metodologia! 📈 Nossa análise usa dados do satélite S-NPP, da NASA, que não é o mesmo que o INPE usa como referência desde 2002. Cada um dos {total_fogo} focos mostrados representa uma área de 375 m² com brilho e calor compatíveis com atividade de fogo.",
          "img": None
     }
     tweets.append(tweet)
     
 
-    tweet = { "text": f"Você pode ver detalhes sobre a situação da Amazônia Legal na página especial do Amazônia Sufocada e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2020. \n\nhttps://infoamazonia.org/projects/portugues-amazonia-sufocada",
+    tweet = { "text": f"Você pode ver detalhes sobre a situação da Amazônia Legal na página especial do Amazônia Sufocada e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2020. \n\nhttps://infoamazonia.org/sufocada",
          "img": None
     }
     tweets.append(tweet)
@@ -183,7 +183,7 @@ def build_thread_most_fire_conservation_units(data):
     
     # Abertura
     tweet = {
-        "text": (f"Oi! Nossa análise descobriu que há {a} áreas de proteção na Amazônia Legal com fogo ativo no último dia, {day}. Mais detalhes no fio 👇"),
+        "text": (f"Oi! Nossa análise descobriu que há {a} unidades de conservação na Amazônia Legal com fogo ativo no último dia, {day}. Mais detalhes no fio 👇"),
         "img": None
     }
     tweets.append(tweet)
@@ -216,13 +216,13 @@ def build_thread_most_fire_conservation_units(data):
     tweets.append(tweet)
     
     
-    tweet = { "text": f"Atenção para a metodologia! A análise usa dados do satélite S-NPP, da NASA, que tem mais resolução que a referência utilizada pelo Inpe e capta maior número de focos. Cada um dos {total_fogo} focos representa uma área de 375m² que pode conter várias ou uma única frente de fogo.",
+    tweet = { "text": f"Atenção para a metodologia! 📈 A análise usa dados do satélite S-NPP, da NASA, que tem mais resolução que a referência utilizada pelo Inpe e capta maior número de focos. Cada um dos {total_fogo} focos representa uma área de 375m² que pode conter várias ou uma única frente de fogo.",
          "img": None
     }
     tweets.append(tweet)
     
 
-    tweet = { "text": f"Você pode ver mais detalhes sobre a situação da Amazônia Legal na página especial Amazônia Sufocada e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2020. \n\nhttps://infoamazonia.org/projects/portugues-amazonia-sufocada",
+    tweet = { "text": f"Você pode ver mais detalhes sobre a situação da Amazônia Legal na página especial Amazônia Sufocada e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2020. \n\nhttps://infoamazonia.org/sufocada",
          "img": None
     }
     tweets.append(tweet)
