@@ -6,6 +6,7 @@ pelo script que faz a publicação no Twitter.
 '''
 import pandas as pd
 import geopandas as gpd
+import os
 import json
 from pprint import pprint
 
