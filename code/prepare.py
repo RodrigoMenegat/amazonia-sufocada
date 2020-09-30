@@ -89,6 +89,74 @@ def add_cities(row, cities):
     })
 
 
+def extract_name_without_category(row):
+    '''
+    Adiciona o nome da unidade de conservação sem
+    o tipo de local. Exemplo: 'Parque Florestal Lorem Ipsum'
+    vira apenas 'Lorem Ipsum'
+    '''
+    
+    # Coloca tudo em lower para padronizar análise
+    full_name = row.nome_uc.lower().strip()
+    category = row.cat_uc.lower().strip()
+    
+    # Padroniza alguns erros de digitação
+    full_name = re.sub("sustentavel", "sustentável", full_name).strip()
+    category = re.sub("sustentavel", "sustentável", category).strip()
+    
+    full_name = re.sub("ecologica", "ecológica", full_name).strip()
+    category = re.sub("ecologica", "ecológica", category).strip()
+    
+    full_name = re.sub("ecologico", "ecológico", full_name).strip()
+    category = re.sub("ecologico", "ecológico", category).strip()
+    
+    full_name = re.sub("estacao", "estação", full_name).strip()
+    category = re.sub("estacao", "estação", category).strip()
+    
+    full_name = re.sub("area", "área", full_name).strip()
+    category = re.sub("area", "área", category).strip()
+    
+    full_name = re.sub("protecao", "proteção", full_name).strip()
+    category = re.sub("protecao", "proteção", category).strip()
+
+    # Remove a categoria
+    name_no_cat = full_name.replace(category, "").strip()
+    
+    # Remove algumas exceções
+    name_no_cat = name_no_cat.replace("natural municipal", "").strip()
+    name_no_cat = name_no_cat.replace("área de relevante interesse ecológica", "").strip()
+    
+    
+    # Remove sobras causadas pelo erro
+    for substring in ["estadual", "nacional", "do ", "de ", "da ", "das ", "dos "]:
+        if name_no_cat.startswith(substring):
+            name_no_cat = re.sub(f'^\s?{substring}', '', name_no_cat)
+            name_no_cat = name_no_cat.strip()
+            
+            
+    # Title case
+    name_no_cat = name_no_cat.title()
+            
+            
+    # Coloca os prefixos de/do/da  e o conjuntivo e em minúscula
+    name_no_cat = re.sub("Do ", "do ", name_no_cat)
+    name_no_cat = re.sub("Da ", "da ", name_no_cat)
+    name_no_cat = re.sub("De ", "de ", name_no_cat)
+    name_no_cat = re.sub("Dos ", "dos ", name_no_cat)
+    name_no_cat = re.sub("Das ", "das ", name_no_cat)
+    name_no_cat = re.sub("Das ", "das ", name_no_cat)
+    name_no_cat = re.sub(" E ", " e ", name_no_cat)
+    
+    # Padroniza alguns edge cases
+    name_no_cat = re.sub("Sustentavel", "Sustentável", name_no_cat)
+    name_no_cat = re.sub("Ecologica", "Ecológica", name_no_cat)
+    name_no_cat = re.sub("Iii", "III", name_no_cat)
+    
+    return pd.Series({
+        "name_no_cat": name_no_cat
+    })
+
+
 def shorten_name(row):
     '''
     Função apply para encurtar os nomes de Unidades de Conservação
@@ -172,6 +240,7 @@ def featherize_sources():
         '''
         if os.path.exists(dir_):
             shutil.rmtree(dir_)
+
         os.makedirs(dir_)
 
     base_path = "../output"
@@ -268,6 +337,10 @@ def featherize_sources():
     biomes.loc[1, "nome_bioma"] = "Massa D'Água Costeira"
     biomes.loc[2, "nome_bioma"] = "Massa D'Água Continental"
 
+    # Remove biomas de Massa D'Água
+    biomes = biomes[~biomes.nome_bioma.isin(["Massa D'Água Costeira", "Massa D'Água Continental"])]
+    biomes = biomes.reset_index(drop=True)
+
     biomes.to_feather(f"{out_path}biomas_amazonia_legal.feather")
 
     
@@ -293,9 +366,9 @@ def featherize_sources():
 
     # Adiciona campos customizados
     con_units["nome_uc_curto"] = con_units.apply(shorten_name, axis=1)
+    con_units["nome_uc_sem_cat"] = con_units.apply(extract_name_without_category, axis=1)
     con_units["biomas"] = con_units.apply(add_biomes, args=(biomes,), axis=1)
     con_units[["cidade", "estado"]] = con_units.apply(add_cities, args=(cities,), axis=1)
-
     con_units.to_feather(f"{out_path}unidades_de_conservacao.feather")
 
     ########################
@@ -323,6 +396,10 @@ def featherize_sources():
 
     # Adiciona campos customizados
     ind_lands["biomes"] = ind_lands.apply(add_biomes, args=(biomes,), axis=1)
+
+    ind_lands["nome_etnia"] = ind_lands["nome_etnia"].str.replace(",", ", ")
+    ind_lands["cidade"] = ind_lands["cidade"].str.replace(",", ", ")
+    ind_lands["estado"] = ind_lands["estado"].str.replace(",", ", ")
 
     ind_lands.to_feather(f"{out_path}/terras_indigenas.feather")
 
