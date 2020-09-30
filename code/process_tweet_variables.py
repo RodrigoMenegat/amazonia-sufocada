@@ -147,6 +147,7 @@ def find_place_with_most_fire(df, code, total_fires, position=1):
     n_focos = int(look_up(source, code, id_, "focos_24h"))
     porcentagem = round(n_focos / total_fires * 100)
     dias_consecutivos = int(look_up(source, code, id_, "dias_consecutivos"))
+    estados = look_up(source, code, id_, "estado")
     
     
     return {
@@ -154,7 +155,8 @@ def find_place_with_most_fire(df, code, total_fires, position=1):
         "nome": nome,
         "n_focos": n_focos,
         "porcentagem": porcentagem,
-        "dias_consecutivos": dias_consecutivos
+        "dias_consecutivos": dias_consecutivos,
+        "estados": estados
     }
 
 def burning_for_the_longest(df, code, position=1):
@@ -192,6 +194,7 @@ def burning_for_the_longest(df, code, position=1):
     id_ = str(result[code])
     nome = result[name_column]
     dias_consecutivos = int(result['dias_consecutivos'])
+    estados = result["estado"]
     
     
     # Verifica se há 'empates'
@@ -201,7 +204,9 @@ def burning_for_the_longest(df, code, position=1):
         "id": id_,
         "nome": nome,
         "dias_consecutivos": dias_consecutivos,
-        "is_draw": is_draw
+        "is_draw": is_draw,
+        "estados": estados
+
     }
 
 
