@@ -341,7 +341,7 @@ def featherize_sources():
     biomes = biomes[~biomes.nome_bioma.isin(["Massa D'Água Costeira", "Massa D'Água Continental"])]
     biomes = biomes.reset_index(drop=True)
 
-    biomes.to_feather(f"{out_path}biomas_amazonia_legal.feather")
+    biomes.to_feather(f"{out_path}/biomas_amazonia_legal.feather")
 
     
     ###############################
@@ -369,7 +369,7 @@ def featherize_sources():
     con_units["nome_uc_sem_cat"] = con_units.apply(extract_name_without_category, axis=1)
     con_units["biomas"] = con_units.apply(add_biomes, args=(biomes,), axis=1)
     con_units[["cidade", "estado"]] = con_units.apply(add_cities, args=(cities,), axis=1)
-    con_units.to_feather(f"{out_path}unidades_de_conservacao.feather")
+    con_units.to_feather(f"{out_path}/unidades_de_conservacao.feather")
 
     ########################
     ### Terras indígenas ###
