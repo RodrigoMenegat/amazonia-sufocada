@@ -71,7 +71,7 @@ def tippecanoe(source):
 
         # Se o output já existir, passa --force. Se não, não
 
-        if source[0] in ["amzsufocada-24h-tis", "amzsufocada-24h-ucs", "amzsufocada-23h-ti-most-fire", "amzsufocada-24h-ucs-most-fire"]:
+        if source[0] in ["amzsufocada-24h-tis", "amzsufocada-24h-ucs", "amzsufocada-24h-ti-most-fire", "amzsufocada-24h-ucs-most-fire"]:
                 # Due to a weird bug, combining the --force and -r1 flags creates mbtiles files with zombie points. We will manually rename/remove the files
                 # to avoid this.
                 command = f"{TIPPECANOE_PATH} -zg -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}_new.mbtiles -l {source[0]} {source[1]} -b0 -r1  --drop-densest-as-needed"
@@ -91,6 +91,11 @@ def tippecanoe(source):
         elif source[0] in ["amzsufocada-terras-indigenas", "amzsufocada-unidades-conserv", "amzsufocada-biomas"]:
                 # Tippecanoe needs a buffer to avoid lines in the tile boundaries of polygons
                 command = f"{TIPPECANOE_PATH} -zg --force -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles -l {source[0]} {source[1]}  --drop-densest-as-needed"
+
+                print(command)
+                result = subprocess.run(command, shell=True, capture_output=True, check=True)
+                print(result.stdout)
+                print(result.stderr)
 
 
         else:
