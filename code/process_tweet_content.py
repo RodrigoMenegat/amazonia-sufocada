@@ -82,14 +82,17 @@ def build_thread_most_fire_indigenous_land(data):
     c = data["terras_indigenas"]["areas_mais_fogo_24h"]["1"]["n_focos"]
     d = data["terras_indigenas"]["areas_mais_fogo_24h"]["1"]["porcentagem"]
     e = data["terras_indigenas"]["areas_mais_fogo_24h"]["1"]["dias_consecutivos"]
+    estados_1 = data["terras_indigenas"]["areas_mais_fogo_24h"]["1"]["estados"]
 
     f = data["terras_indigenas"]["areas_mais_fogo_24h"]["2"]["nome"]
     g = data["terras_indigenas"]["areas_mais_fogo_24h"]["2"]["n_focos"]
     h = data["terras_indigenas"]["areas_mais_fogo_24h"]["2"]["porcentagem"]
+    estados_2 = data["terras_indigenas"]["areas_mais_fogo_24h"]["2"]["estados"]
 
     i = data["terras_indigenas"]["areas_mais_fogo_24h"]["3"]["nome"]
     j = data["terras_indigenas"]["areas_mais_fogo_24h"]["3"]["n_focos"]
     k = data["terras_indigenas"]["areas_mais_fogo_24h"]["3"]["porcentagem"]
+    estados_3 = data["terras_indigenas"]["areas_mais_fogo_24h"]["3"]["porcentagem"]
 
     
     tweets = [ ]
@@ -109,7 +112,7 @@ def build_thread_most_fire_indigenous_land(data):
     tweets.append(tweet)
     
     # Destaca a terra indígena com mais focos de fogo nas últimas 24h.
-    tweet = { "text": f"A situação mais crítica acontece na Terra Indígena {b}, cujos {c} focos de calor representam {d}% do total registrado em terras indígenas nas últimas 24h. Além disso, lá existem áreas com fogo há {e} dias consecutivos. Veja no mapa.",
+    tweet = { "text": f"A situação mais crítica acontece na Terra Indígena {b} {estados_1}, cujos {c} focos são {d}% do total registrado em terras indígenas nas últimas 24h. Além disso, lá existem áreas com fogo há {e} dias seguidos. Veja no mapa.",
          "img": "../output/imgs/tweets/ti_24h_local_mais_focos.jpg"
     }
     tweets.append(tweet)
@@ -117,8 +120,8 @@ def build_thread_most_fire_indigenous_land(data):
     
     tweet =  { 
                 "text": (f"Ela, porém, não é a única que sofre. As outras duas terras com mais fogo no último dia foram estas:\n\n"
-					f"- {f}: {h}% do total, com {g} focos\n"
-					f"- {i}: {k}% do total, com {j} focos\n"),
+					f"- {f} ({estados_2}): {h}% do total, com {g} focos\n"
+					f"- {i} ({estados_3}): {k}% do total, com {j} focos\n"),
                 "img": None
             }
     tweets.append(tweet)
@@ -138,7 +141,7 @@ def build_thread_most_fire_indigenous_land(data):
 
     # Não podemos aceitar nenhum tuíte com mais de 280 toques
     tweets_over_280_chars = [len(tweet["text"]) >= 280 for tweet in tweets]
-    print(tweets_over_280_chars)
+    print([len(tweet["text"]) for tweet in tweets])
     assert not any(tweets_over_280_chars), "tuítes acima do limite de caracteres detectados"
 
     return tweets
@@ -169,14 +172,20 @@ def build_thread_most_fire_conservation_units(data):
     c = data["unidades_de_conservacao"]["areas_mais_fogo_24h"]["1"]["n_focos"]
     d = data["unidades_de_conservacao"]["areas_mais_fogo_24h"]["1"]["porcentagem"]
     e = data["unidades_de_conservacao"]["areas_mais_fogo_24h"]["1"]["dias_consecutivos"]
+    estados_1 = data["terras_indigenas"]["areas_mais_fogo_24h"]["1"]["estados"]
+
 
     f = data["unidades_de_conservacao"]["areas_mais_fogo_24h"]["2"]["nome"]
     g = data["unidades_de_conservacao"]["areas_mais_fogo_24h"]["2"]["n_focos"]
     h = data["unidades_de_conservacao"]["areas_mais_fogo_24h"]["2"]["porcentagem"]
+    estados_2 = data["unidades_de_conservacao"]["areas_mais_fogo_24h"]["2"]["estados"]
+
 
     i = data["unidades_de_conservacao"]["areas_mais_fogo_24h"]["3"]["nome"]
     j = data["unidades_de_conservacao"]["areas_mais_fogo_24h"]["3"]["n_focos"]
     k = data["unidades_de_conservacao"]["areas_mais_fogo_24h"]["3"]["porcentagem"]
+    estados_3 = data["unidades_de_conservacao"]["areas_mais_fogo_24h"]["3"]["estados"]
+
 
     
     tweets = [ ]
@@ -197,7 +206,7 @@ def build_thread_most_fire_conservation_units(data):
     tweets.append(tweet)
     
     # Destaca a terra indígena com mais focos de fogo nas últimas 24h.
-    tweet = { "text": f"Nas últimas 24h, a maior quantidade de focos aconteceu na unidade {b}, que teve {c} pontos de fogo ({d}% do total). Essa área está queimando há {e} dias. Veja no mapa:",
+    tweet = { "text": f"Nas últimas 24h, a maior quantidade de focos aconteceu na unidade {b} {estados_1}, que teve {c} pontos de fogo ({d}% do total). Essa área está queimando há {e} dias. Veja no mapa:",
 
          "img": f"{PROJECT_ROOT}/output/imgs/tweets/uc_24h_local_mais_focos.jpg"
 
@@ -207,8 +216,8 @@ def build_thread_most_fire_conservation_units(data):
     
     tweet =  { 
                 "text": (f"As outras duas unidades de conservação com mais fogo no últimos dia foram estas:\n\n"
-                    f"- {f}: {h}% do total, com {g} focos\n"
-                    f"- {i}: {k}% do total, com {j} focos\n"),
+                    f"- {f} ({estados_2}): {h}% do total, com {g} focos\n"
+                    f"- {i} ({estados_3}): {k}% do total, com {j} focos\n"),
 
                 "img": None
               
@@ -230,7 +239,7 @@ def build_thread_most_fire_conservation_units(data):
 
     # Não podemos aceitar nenhum tuíte com mais de 280 toques
     tweets_over_280_chars = [len(tweet["text"]) >= 280 for tweet in tweets]
-    print(tweets_over_280_chars)
+    print([len(tweet["text"]) for tweet in tweets])
     assert not any(tweets_over_280_chars), "tuítes acima do limite de caracteres detectados"
     
     return tweets
