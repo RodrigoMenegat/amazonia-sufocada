@@ -5,6 +5,7 @@ de forma otimizada.
 '''
 
 import geopandas as gpd
+import numpy as np
 import pandas as pd
 import os
 import re
@@ -94,6 +95,11 @@ def extract_name_without_category(row):
     Adiciona o nome da unidade de conservação sem
     o tipo de local. Exemplo: 'Parque Florestal Lorem Ipsum'
     vira apenas 'Lorem Ipsum'
+    
+    Parâmetros:
+    
+    > row: uma linha do dataframe, representando um território
+
     '''
     
     # Coloca tudo em lower para padronizar análise
@@ -403,6 +409,98 @@ def featherize_sources():
 
     ind_lands.to_feather(f"{out_path}/terras_indigenas.feather")
 
+
+    ########################################
+    ### Quadrados da divisão da Amazônia ###
+    ########################################
+
+    def find_territories(row):
+        '''
+        Encontra todas as cidades, estados, biomas, TIs e UCs
+        que fazem interseção com a área destacada. Essa função
+        deve ser aplicada (df.apply) no dataframe que contém 
+        toda a região da Amazônia Legal dividida em pequenos quadrados.
+        
+        Parâmetros:
+        
+        > row: uma linha do dataframe, representando um território
+        '''
+        
+        box = row.geometry
+        
+        # Terras indígenas que fazem interseção
+        ti_intersection = ind_lands[ind_lands.intersects(box)]
+
+        nome_ti = ti_intersection["nome_ti"].tolist()
+        nome_ti = ", ".join(nome_ti)
+
+        cod_ti = ti_intersection["cod_ti"].astype(str).tolist()
+        cod_ti = ", ".join(cod_ti)
+        
+        # Biomas que fazem interseção
+        biome_intersection = biomes[biomes.intersects(box)]
+
+        nome_bioma = biome_intersection["nome_bioma"].tolist()
+        nome_bioma = ", ".join(nome_bioma)
+
+        cod_bioma = biome_intersection["cod_bioma"].astype(str).tolist()
+        cod_bioma = ", ".join(cod_bioma)
+        
+        # Unidades de conservação que fazem interseção
+        uc_intersection = con_units[con_units.intersects(box)]
+
+        nome_uc = uc_intersection["nome_uc"].tolist()
+        nome_uc = ", ".join(nome_uc)
+
+        cod_uc = uc_intersection["cod_uc"].astype(str).tolist()
+        cod_uc = ", ".join(cod_uc)
+        
+        # Cidades e estados que fazem interseção
+        city_intersection = cities[cities.intersects(box)]
+        
+        estado = city_intersection["estado"].unique().tolist()
+        estado = ", ".join(estado)
+        
+        cidade = city_intersection["cidade"].tolist()
+        cidade = ", ".join(cidade)
+        
+        return pd.Series({
+            "cidade": cidade,
+            "cod_bioma": cod_bioma,
+            "cod_ti": cod_ti,
+            "cod_uc": cod_uc,
+            "estado": estado,
+            "nome_bioma": nome_bioma,
+            "nome_ti": nome_ti,
+            "nome_uc": nome_uc
+        })
+
+    grid = gpd.read_file(f"{in_path}/amazonia_legal_grid_20km")
+
+    # Torna o id inteiro
+    grid["id"] = grid.id.astype(int).astype(str)
+
+    # Transforma para o CRS correto (estava em conical equal area)
+    grid = grid.to_crs(cities.crs)
+
+    # Adiciona dados dos locais com interseção
+    grid[["cidade", "cod_bioma", "cod_ti", "cod_uc", "estado", "nome_bioma", "nome_ti", "nome_uc"]] = grid.apply(find_territories, axis=1)
+
+    # Preenche espaços vazios com NaNs
+    grid = grid.applymap(lambda x: np.nan if x == "" else x)
+
+    # O geopandas retira o CRS depois de uma função apply.
+    # Precisamos adicionar novamente.
+    # Transforma para o CRS correto (estava em conical equal area)
+    grid.crs = cities.crs
+
+    # Renomeia e remove colunas
+    grid = grid.drop(["left", "top", "right", "bottom"], axis=1)
+    grid = grid.rename(columns={"id": "cod_box"})
+
+    print("Crs is", grid.crs)
+
+    grid.to_feather(f"{out_path}/grid_20km.feather")
 
 def main():
 	featherize_sources()
