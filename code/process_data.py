@@ -32,12 +32,15 @@ PROJECT_ROOT = dirname(abspath(dirname(__file__)))
 ### Dados constantes ###
 ########################
 
+BIOMES = BIOMES = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/biomas_amazonia_legal.feather")
 CITIES = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/cidades_amazonia_legal.feather")
 CONSERVATION_UNITS =  gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/unidades_de_conservacao.feather")
+GRID = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/grid_20km.feather")
 INDIGENOUS_LAND = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/terras_indigenas.feather")
 LEGAL_AMAZON = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/limites_amazonia_legal.feather")
-BIOMES = BIOMES = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/biomas_amazonia_legal.feather")
 
+GRID.crs = LEGAL_AMAZON.crs
+print("GRID.crs", GRID.crs)
 
 ###############
 ### Helpers ###
@@ -171,6 +174,7 @@ def fill_data(datapoints):
     # Mantém apenas algumas colunas especificas dos bancos de dados estáticos
     indigen_cols = ["cod_ti", "nome_ti", "nome_etnia", "geometry"]
     conserv_cols = ["nome_uc", "cod_uc", "cat_uc",  "geometry"]
+    grid_cols = ["cod_box", "geometry"]
 
     datapoints = gpd.sjoin(datapoints, CITIES, how=how, op=op).drop("index_right", axis=1)
     
@@ -179,6 +183,8 @@ def fill_data(datapoints):
     datapoints = gpd.sjoin(datapoints, CONSERVATION_UNITS[conserv_cols], how=how, op=op).drop("index_right", axis=1)
     
     datapoints = gpd.sjoin(datapoints, BIOMES, how=how, op=op).drop("index_right", axis=1)
+
+    datapoints = gpd.sjoin(datapoints, GRID[grid_cols], how=how, op=op).drop("index_right", axis=1)
 
     # Remove as entradas de fogo duplicadas. São poucas, causadas por problemas de sobreposição
     # no shapefile de unidades de conservação, que fazem um ponto estar contido em duas UCs ao mesmo tempo.
@@ -347,7 +353,8 @@ def build_original_database():
                 "cod_ti", "nome_ti", "nome_etnia",
                 "cod_bioma", "nome_bioma",
                 "bright_ti4", "bright_ti5", "frp",
-                "nome_uc", "cod_uc", "geometry"
+                "nome_uc", "cod_uc", "geometry",
+                "cod_box"
             ]]
 
     df = sanitize_duplicates(df, "bd_completo")
@@ -409,7 +416,8 @@ def fetch_recent_data():
                     "cod_ti", "nome_ti", "nome_etnia",
                     "cod_bioma", "nome_bioma",
                     "bright_ti4", "bright_ti5", "frp",
-                    "nome_uc", "cod_uc", "geometry"
+                    "nome_uc", "cod_uc", "geometry",
+                    "cod_box"
                 ]]
 
         # Lida com duplicatas
@@ -464,7 +472,7 @@ def update_land_datasets(df_24h, df_7d, full_db):
     
     # Por quais colunas vamos agregar?
     # Cada resultado vai ser salvo em um arquivo diferente
-    columns = ["cod_ti", "cod_uc", "cod_bioma"]
+    columns = ["cod_ti", "cod_uc", "cod_bioma", "cod_box"]
 
     # Essas são as agregações temporais que faremos
     # e seus respectivos dataframes
@@ -518,6 +526,14 @@ def update_land_datasets(df_24h, df_7d, full_db):
             save_csv(gpby, f"{PROJECT_ROOT}/output/csvs/land_info/biomas.csv")
             save_geojson(gpby, f"{PROJECT_ROOT}/output/jsons/land_info/biomas.json")
 
+        elif column == "cod_box":
+            
+            gpby = GRID.merge(gpby, on=column, how="left")
+
+            save_feather(gpby, f"{PROJECT_ROOT}/output/feathers/land_info/grid_20km.feather")
+            save_csv(gpby, f"{PROJECT_ROOT}/output/csvs/land_info/grid_20km.csv")
+            save_geojson(gpby, f"{PROJECT_ROOT}/output/jsons/land_info/grid_20km.json")
+
 
 #################
 ### Execution ###
@@ -564,7 +580,7 @@ def main(argv):
 
         # Cria arquivos com os dados estáticos sobre terras indígenas e unidades de conservação
         print("> Creating land databases")
-        update_land_datasets(df_24h, df_7d, full_db)
+        return update_land_datasets(df_24h, df_7d, full_db)
         
     except Exception as e:
         
