@@ -92,7 +92,7 @@ def build_thread_most_fire_indigenous_land(data):
     i = data["terras_indigenas"]["areas_mais_fogo_24h"]["3"]["nome"]
     j = data["terras_indigenas"]["areas_mais_fogo_24h"]["3"]["n_focos"]
     k = data["terras_indigenas"]["areas_mais_fogo_24h"]["3"]["porcentagem"]
-    estados_3 = data["terras_indigenas"]["areas_mais_fogo_24h"]["3"]["porcentagem"]
+    estados_3 = data["terras_indigenas"]["areas_mais_fogo_24h"]["3"]["estados"]
 
     
     tweets = [ ]
@@ -112,7 +112,7 @@ def build_thread_most_fire_indigenous_land(data):
     tweets.append(tweet)
     
     # Destaca a terra indígena com mais focos de fogo nas últimas 24h.
-    tweet = { "text": f"A situação mais crítica acontece na Terra Indígena {b} {estados_1}, cujos {c} focos são {d}% do total registrado em terras indígenas nas últimas 24h. Além disso, lá existem áreas com fogo há {e} dias seguidos. Veja no mapa.",
+    tweet = { "text": f"A situação mais crítica acontece na Terra Indígena {b} ({estados_1}), cujos {c} focos são {d}% do total registrado em terras indígenas nas últimas 24h. Além disso, lá existem áreas com fogo há {e} dias seguidos. Veja no mapa.",
          "img": "../output/imgs/tweets/ti_24h_local_mais_focos.jpg"
     }
     tweets.append(tweet)
@@ -206,7 +206,7 @@ def build_thread_most_fire_conservation_units(data):
     tweets.append(tweet)
     
     # Destaca a terra indígena com mais focos de fogo nas últimas 24h.
-    tweet = { "text": f"Nas últimas 24h, a maior quantidade de focos aconteceu na unidade {b} {estados_1}, que teve {c} pontos de fogo ({d}% do total). Essa área está queimando há {e} dias. Veja no mapa:",
+    tweet = { "text": f"Nas últimas 24h, a maior quantidade de focos aconteceu na unidade {b} ({estados_1}), que teve {c} pontos de fogo ({d}% do total). Essa área está queimando há {e} dias. Veja no mapa:",
 
          "img": f"{PROJECT_ROOT}/output/imgs/tweets/uc_24h_local_mais_focos.jpg"
 
