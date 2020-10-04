@@ -32,7 +32,7 @@ PROJECT_ROOT = dirname(abspath(dirname(__file__)))
 
 CONDA_PREFIX = os.environ["CONDA_PREFIX"] # path to the environment-specific utilities
 
-TIPPECANOE_PATH = "tippecanoe"#abspath("/home/tippecanoe/tippecanoe")
+TIPPECANOE_PATH = abspath("/home/tippecanoe/tippecanoe")
 
 TOKEN = mapbox_credentials.token
 
