@@ -40,7 +40,6 @@ INDIGENOUS_LAND = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/terr
 LEGAL_AMAZON = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/limites_amazonia_legal.feather")
 
 GRID.crs = LEGAL_AMAZON.crs
-print("GRID.crs", GRID.crs)
 
 ###############
 ### Helpers ###
