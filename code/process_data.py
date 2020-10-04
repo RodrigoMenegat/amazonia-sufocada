@@ -579,7 +579,7 @@ def main(argv):
 
         # Cria arquivos com os dados estáticos sobre terras indígenas e unidades de conservação
         print("> Creating land databases")
-        return update_land_datasets(df_24h, df_7d, full_db)
+        update_land_datasets(df_24h, df_7d, full_db)
         
     except Exception as e:
         
