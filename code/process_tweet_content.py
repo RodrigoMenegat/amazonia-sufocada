@@ -244,29 +244,239 @@ def build_thread_most_fire_conservation_units(data):
     
     return tweets
 
+
+def build_thread_7d_grid(data):
+    '''
+    Acessa as variáveis criadas por find_values
+    para montar a thread semanal com base nos grids de
+    20 km quadrados que será publicada no Twitter.
+    
+    O fio é estruturado em um array do objetos com um campo
+    para o texto e um para o caminho de uma eventual foto.
+    '''
+
+    # Definição de variáveis
+
+    # Gerais
+    day = datetime.now().strftime("%d/%m/%Y")
+    total_geral = data["total_focos_amazonia_legal_2020"]
+    total_semana = data["total_focos_7d"]
+    total_focos_areas_protegidas = data["grid"]["fogo_em_areas_protegidas"]["total"]
+
+    # Destaque 1
+    grid_1_n_focos = data["grid"]["areas_mais_fogo_7d"]["1"]["n_focos"]
+    grid_1_dias_consecutivos = data["grid"]["areas_mais_fogo_7d"]["1"]["dias_consecutivos"]
+    grid_1_cidade = data["grid"]["areas_mais_fogo_7d"]["1"]["cidade"]
+    grid_1_estado = data["grid"]["areas_mais_fogo_7d"]["1"]["estado"]
+    grid_1_bioma = data["grid"]["areas_mais_fogo_7d"]["1"]["nome_bioma"]
+    grid_1_ti = data["grid"]["areas_mais_fogo_7d"]["1"]["nome_ti"]
+    grid_1_uc = data["grid"]["areas_mais_fogo_7d"]["1"]["nome_uc"]
+
+
+    # Destaque 2
+    grid_2_n_focos = data["grid"]["areas_mais_fogo_7d"]["2"]["n_focos"]
+    grid_2_dias_consecutivos = data["grid"]["areas_mais_fogo_7d"]["2"]["dias_consecutivos"]
+    grid_2_cidade = data["grid"]["areas_mais_fogo_7d"]["2"]["cidade"]
+    grid_2_estado = data["grid"]["areas_mais_fogo_7d"]["2"]["estado"]
+    grid_2_bioma = data["grid"]["areas_mais_fogo_7d"]["2"]["nome_bioma"]
+    grid_2_ti = data["grid"]["areas_mais_fogo_7d"]["2"]["nome_ti"]
+    grid_2_uc = data["grid"]["areas_mais_fogo_7d"]["2"]["nome_uc"]
+
+
+    # Destaque 3
+    grid_3_n_focos = data["grid"]["areas_mais_fogo_7d"]["3"]["n_focos"]
+    grid_3_dias_consecutivos = data["grid"]["areas_mais_fogo_7d"]["3"]["dias_consecutivos"]
+    grid_3_cidade = data["grid"]["areas_mais_fogo_7d"]["3"]["cidade"]
+    grid_3_estado = data["grid"]["areas_mais_fogo_7d"]["3"]["estado"]
+    grid_3_bioma = data["grid"]["areas_mais_fogo_7d"]["3"]["nome_bioma"]
+    grid_3_ti = data["grid"]["areas_mais_fogo_7d"]["3"]["nome_ti"]
+    grid_3_uc = data["grid"]["areas_mais_fogo_7d"]["3"]["nome_uc"]
+
+
+    # Conteúdo do fio
+    tweets = [ ]
+    
+    # Abre
+    tweet = {
+        "text": (f"Olá! Hoje é dia do nosso relatório semanal, em que falamos sobre as regiões da Amazônia Legal que mais tiveram focos de calor entre hoje, {day}, e o último domingo. Acompanhe no fio 👇"),
+        "img": None
+    }
+    tweets.append(tweet)
+
+
+    # Destaque das áreas
+    tweet = {
+        "text": (f"No mapa abaixo, cada qudarado representa uma região de 20km². Quanto mais escura a área, mais focos de calor aconteceram lá dentro. Cada ponto representa uma das {total_semana} áreas de 375m² em que o satélite detectou atividade de fogo."),
+        "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_todas_as_areas.jpg"
+    }
+    tweets.append(tweet)
+
+
+    # Quantas estão em regiões protegidas?
+    if total_focos_areas_protegidas > 0:
+        tweet = {
+            "text": (f"Das dez regiões com mais fogo nos últimos sete dias, {total_focos_areas_protegidas} estão nos arredores ou no interior de unidadades de conservação ou terras indígenas."),
+            "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_todas_as_areas.jpg"
+        }
+        tweets.append(tweet)
+    else:
+        tweet = {
+            "text": (f"Das dez regiões com mais fogo nos últimos sete dias, nenhuma está nos arredores ou no interior de unidadades de conservação ou de terras indígenas."),
+            "img": None
+        }
+        tweets.append(tweet)
+
+    # Área de destaque 1
+    if not grid_1_ti and not grid_1_uc:
+        tweet = {
+            "text": (f"A região com mais fogo está em destaque no mapa. Ela fica nos arredores de {grid_1_cidade}, {grid_1_estado} e faz parte do bioma {grid_1_bioma}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos."),
+            "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_1.jpg"
+        }
+        tweets.append(tweet)
+
+    elif grid_1_ti and not grid_1_uc:
+        tweet = {
+            "text": (f"A região com mais fogo está em destaque no mapa. Ela fica nos arredores de {grid_1_cidade}, {grid_1_estado} e faz parte do bioma {grid_1_bioma}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na terra indígena {grid_1_ti}."),
+            "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_1.jpg"
+        }
+        tweets.append(tweet)
+
+    elif not grid_1_ti and grid_1_uc:
+        tweet = {
+            "text": (f"Veja no mapa a região com mais fogo, nos arredores de {grid_1_cidade}, {grid_1_estado} e faz parte do bioma {grid_1_bioma}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na unidade de conservação {grid_1_uc}."),
+            "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_1.jpg"
+        }
+        tweets.append(tweet)
+
+    elif grid_1_ti and grid_1_uc:
+        tweet = {
+            "text": (f"Veja no mapa a região com mais fogo, perto de {grid_1_cidade}, {grid_1_estado}. Essa área queima há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na unidade de conservação {grid_1_uc} e na terra indígena {grid_1_ti}."),
+            "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_1.jpg"
+        }
+        tweets.append(tweet)
+
+
+    # Área de destaque 2
+    if not grid_2_ti and not grid_2_uc:
+        tweet = {
+            "text": (f"Outras áreas também estão em situação crítica. A 2ª área que mais queima fica no município de {grid_2_cidade}, {grid_2_estado} e faz parte do bioma {grid_2_bioma}. Essa área está queimando há {grid_2_dias_consecutivos} dias consecutivos."),
+            "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_2.jpg"
+        }
+        tweets.append(tweet)
+
+    elif grid_2_ti and not grid_2_uc:
+        tweet = {
+            "text": (f"Outras áreas também estão em situação crítica. A 2ª área que mais queima fica no município de {grid_2_cidade}, {grid_2_estado} e faz parte do bioma {grid_2_bioma}. Essa área está queimando há {grid_2_dias_consecutivos} dias consecutivos. Ao menos parte dela fica na terra indígena {grid_2_ti}."),
+            "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_2.jpg"
+        }
+        tweets.append(tweet)
+
+    elif not grid_2_ti and grid_2_uc:
+        tweet = {
+            "text": (f"Outras áreas também estão em situação crítica. A 2ª área que mais queima fica no município de {grid_2_cidade}, {grid_2_estado} e faz parte do bioma {grid_2_bioma}. Essa área está queimando há {grid_2_dias_consecutivos} dias consecutivos. Ao menos parte dela fica na unidade de conservação {grid_2_uc}."),
+            "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_2.jpg"
+        }
+        tweets.append(tweet)
+
+    elif grid_2_ti and grid_2_uc:
+        tweet = {
+            "text": (f"Outras áreas também estão em situação crítica. A 2ª área que mais queima está no município de {grid_2_cidade}, {grid_2_estado}. Essa área queima há {grid_2_dias_consecutivos} dias consecutivos. Partes dela ficam na undidade de conservação {grid_2_uc} e na terra indígena {grid_2_ti}."),
+            "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_2.jpg"
+        }
+        tweets.append(tweet)
+
+
+    # Área de queimada 3
+    if not grid_3_ti and not grid_3_uc:
+        tweet = {
+            "text": (f"Por fim, a 3ª área com mais focos de calor fica em {grid_3_cidade}, {grid_3_estado} e faz parte do bioma {grid_3_bioma}. Há registo fogo na região faz {grid_3_dias_consecutivos} dias seguidos."),
+            "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_3.jpg"
+        }
+        tweets.append(tweet)
+
+    elif grid_3_ti and not grid_3_uc:
+        tweet = {
+            "text": (f"Por fim, a 3ª área com mais focos de calor fica em {grid_3_cidade}, {grid_3_estado} e faz parte do bioma {grid_3_bioma}. Há registo fogo na região faz {grid_3_dias_consecutivos} dias seguido. Ao menos parte dessa área fica na terra indígena {grid_3_ti}."),
+            "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_3.jpg"
+        }
+        tweets.append(tweet)
+
+    elif not grid_3_ti and grid_3_uc:
+        tweet = {
+            "text": (f"Outras áreas também estão em situação crítica. A 2ª área que mais queima fica no município de {grid_3_cidade}, {grid_3_estado} e faz parte do bioma {grid_3_bioma}. Essa área está queimando há {grid_3_dias_consecutivos} dias consecutivos e ao menos parte dela está na unidade de conservação {grid_3_uc}."),
+            "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_3.jpg"
+        }
+        tweets.append(tweet)
+
+    elif grid_3_ti and grid_3_uc:
+        tweet = {
+            "text": (f"Outras áreas também estão em situação crítica. A 2ª área que mais queima está no município de {grid_3_cidade}, {grid_3_estado}. Essa área queima há {grid_3_dias_consecutivos} dias consecutivos e partes dela ficam na undidade de conservação {grid_3_uc} e na terra indígena {grid_3_ti}."),
+            "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_3.jpg"
+        }
+        tweets.append(tweet)
+
+
+    # Metodologia
+    tweet = {
+            "text": (f"Para identificar as áreas listadas, dividimos o território da Amazônia Legal em uma grade de retângulos de cerca de 20km². As áreas com mais fogo são aquelas que tiveram mais focos de calor detctados pelo satélite S-NPP, da NASA, entre o último domingo e hoje, {day}."),
+            "img": None
+        }
+    tweets.append(tweet)
+
+    tweet = {
+            "text": (f"Esse satélite não é o mesmo que o INPE usa como referência desde 2002. Cada um dos {total_semana} focos registrados nessa semana representa uma área de 375 m² com brilho e calor compatíveis com atividade de fogo."),
+            "img": None
+        }
+    tweets.append(tweet)
+
+
+    # Link out
+    tweet = {
+            "text": (f"Você pode ver mais detalhes na página especial do Amazônia Sufocada e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2020."),
+            "img": None
+        }
+    tweets.append(tweet)
+
+
+
+    # Checagem de tamanho
+    tweets_over_280_chars = [len(tweet["text"]) >= 280 for tweet in tweets]
+    print([len(tweet["text"]) for tweet in tweets])
+    assert not any(tweets_over_280_chars), "tuítes acima do limite de caracteres detectados"
+    
+    return tweets
+
 ################
 ### Execução ###
 ################
 
 def main():
 
-	# Lê os dados das variáveis de 24h
-	data_24h = read_variables("24h")
 
-	# Verifica se o diretório de tweets de fato existe
-	directory = f"{PROJECT_ROOT}/output/jsons/tweets/"
-	if not os.path.exists(directory):
-		os.makedirs(directory)
+    # Verifica se o diretório de tweets de fato existe
+    directory = f"{PROJECT_ROOT}/output/jsons/tweets/"
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
-	# Terras indígenas, 24h
-	with open(f"{PROJECT_ROOT}/output/jsons/tweets/tis_24h.json", "w+") as f:
-		content = build_thread_most_fire_indigenous_land(data_24h)
-		json.dump(content, f, indent=2)
+    # Lê os dados das variáveis de 24h
+    data_24h = read_variables("24h")
 
-	# Unidades de conservação, 24h
-	with open(f"{PROJECT_ROOT}/output/jsons/tweets/ucs_24h.json", "w+") as f:
-		content = build_thread_most_fire_conservation_units(data_24h)
-		json.dump(content, f, indent=2)
+    # Terras indígenas, 24h
+    with open(f"{PROJECT_ROOT}/output/jsons/tweets/tis_24h.json", "w+") as f:
+        content = build_thread_most_fire_indigenous_land(data_24h)
+        json.dump(content, f, indent=2)
+
+    # Unidades de conservação, 24h
+    with open(f"{PROJECT_ROOT}/output/jsons/tweets/ucs_24h.json", "w+") as f:
+        content = build_thread_most_fire_conservation_units(data_24h)
+        json.dump(content, f, indent=2)
+
+
+    # Lê os dados das variáveis de 7 dias
+    data_7d = read_variables("7d")
+    with open(f"{PROJECT_ROOT}/output/jsons/tweets/grid_7d.json", "w+") as f:
+        content = build_thread_7d_grid(data_7d)
+        json.dump(content, f, indent=2)
 
 if __name__ == "__main__":
 	main()
