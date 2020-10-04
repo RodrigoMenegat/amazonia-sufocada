@@ -326,8 +326,8 @@ def find_values_7d():
 
 
         return {
-            "in_indigenous_land": grids_ind_land,
-            "in_conservation_units": grids_conservation_unit,
+            "em_tis": grids_ind_land,
+            "em_ucs": grids_conservation_unit,
             "total": grids_ind_land + grids_conservation_unit
         }
 
@@ -383,7 +383,7 @@ def find_values_7d():
             "porcentagem": porcentagem,
             "dias_consecutivos": dias_consecutivos,
             "cidade": cidade,
-            "estados": estado,
+            "estado": estado,
             "nome_ti": nome_ti,
             "nome_uc": nome_uc,
             "nome_uc_curto": nome_uc_curto,
@@ -396,7 +396,7 @@ def find_values_7d():
     grid = {}
 
     # Das dez áreas com mais fogo, quantas são em UCs e TIs?
-    grid["fire_in_protected_areas"] = find_rects_with_fire_in_proteced_areas(10, "7d")
+    grid["fogo_em_areas_protegidas"] = find_rects_with_fire_in_proteced_areas(10, "7d")
 
     # Grids com mais focos de foco nos últimos 7d e detalhes sobre eles
     grid["areas_mais_fogo_7d"] = { }
