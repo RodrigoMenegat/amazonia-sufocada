@@ -32,6 +32,7 @@ PROJECT_ROOT = dirname(abspath(dirname(__file__)))
 
 TIS_INFO = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/land_info/terras_indigenas.feather")
 UCS_INFO = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/land_info/unidades_de_conservacao.feather")
+GRID = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/land_info/grid_20km.feather")
 
 #######################
 ### Token de acesso ###
@@ -211,22 +212,25 @@ def make_maps(time, land_type):
             pad_inches = 0)
 
 
-def get_static_images(path, time, land_type):
+def get_static_images_24h(path, time, land_type):
     '''
     Usa a API do Mapbox para gerar
-    imagens estáticas dos mapas desejados.
+    imagens estáticas dos mapas desejados
+    para o fio das últimas 24h.
 
     Parâmetros:
 
     > path: o nome do arquivo em que a imagem deve ser salva
+
     > time: o recorte temporal que deve ser usado para gerar a imagem.
     Por enquanto, apenas '24h' foi implementado.
+
     > land_type: pode ser 'ucs' ou 'tis'. Determina
     qual imagem será requisita para a API.
     '''
 
     # Lê as variáveis do twitter
-    twitter_vars = read_variables("24h")
+    twitter_vars = read_variables(time)
 
     # Ids dos estilos em que queremos gerar o mapa
     style_ids = {
@@ -245,7 +249,6 @@ def get_static_images(path, time, land_type):
     url = handle_cache(url, style_id)
     # Salva dados para aplicar o 'dibre' no cache
     save_request_info(url, style_id)
-
 
 
     r = requests.get(url, stream=True,  headers={'Cache-Control': "no-cache"})
@@ -338,6 +341,98 @@ def get_static_images(path, time, land_type):
         raise Exception(r.status_code)     
 
 
+def get_static_images_7d(path):
+    '''
+    Usa a API de imagens estáticas do Mapbox
+    para gerar as imagens para a thread sobre
+    as áreas com mais fogo nos últimos sete dias.
+
+    Parâmetros:
+    
+    > path: o nome do arquivo em que a imagem deve ser salva
+    '''
+    # Lê as variáveis do twitter
+    twitter_vars = read_variables("7d")
+
+    # Ids dos estilos em que queremos gerar o mapa
+    style_ids = {
+        "full_grid": "ckfujebhy0lt219o518brw73i",
+        "grid_most_fire_1": "ckfukyes52rxd19p5z8a7ij6s",
+        "grid_most_fire_2": "ckful2gxp2s1819p58mha9arp",
+        "grid_most_fire_3": "ckful68oj0tdh19lpuboa0wbv"
+    }
+
+    # 1. Salva a imagem de todos os retângulos (heatmap do grid)
+
+    style_id = style_ids["full_grid"]
+    url =f"https://api.mapbox.com/styles/v1/{USERNAME}/{style_id}/static/-59.1764,-6.55711,4.2,0/800x800@2x?access_token={TOKEN}"
+    url = handle_cache(url, style_id)
+    save_request_info(url, style_id)
+
+    r = requests.get(url, stream=True,  headers={'Cache-Control': "no-cache"})
+    
+    if r.status_code == 200:
+        print(url)
+        fpath = path + f"/grid_7d_todas_as_areas.jpg"
+        with open(fpath, 'wb+') as f:
+            r.raw.decode_content = True
+            shutil.copyfileobj(r.raw, f)
+    else:
+        print(r.text)
+        raise Exception(r.status_code)     
+
+    # 2. Salva as três áreas com mais fogo, junto com seus respectivos pontos
+    for i in range(1, 4):
+
+        overlay = GRID.copy()
+
+        # Filtra o geodf para manter apenas a terra com mais focos
+        most_fires_id = twitter_vars["grid"]["areas_mais_fogo_7d"][f"{i}"]["id"]
+        overlay = overlay[overlay[f"cod_box"] ==  most_fires_id]
+
+        assert overlay.shape[0] == 1, "ambiguous land id"
+
+        # Transforma em um arquivo GeoJSON
+        overlay = json.loads(
+            overlay.head(1).geometry.simplify(.05).to_json() # Isso é uma string simples em formato json
+        )
+
+        # Adiciona geojson customizado no padrão simplestyle-spec do Mapbox
+        # https://github.com/mapbox/simplestyle-spec/tree/master/1.1.0
+        for feature in overlay["features"]:
+
+            feature["properties"] = {
+                    "fill":"%23980043",
+                    "stroke": "%23dd1c77",
+                    "stroke-width": 3,
+                    "fill-opacity":.5,
+                }
+
+
+        # Transforma em string novamente
+        overlay = json.dumps(overlay)
+
+        # Altera o style do id para acessar os pontos corretos
+        style_id = style_ids[f"grid_most_fire_{i}"]
+
+
+        # Constrói a URL
+        url =f"https://api.mapbox.com/styles/v1/{USERNAME}/{style_id}/static/geojson({overlay})/auto/800x800@2x?access_token={TOKEN}&before_layer=amzsufocada-7d-grid-{i}"
+        url = handle_cache(url, style_id)
+        save_request_info(url, style_id)
+        print(url)
+
+        # Envia requisição e salva o retorno
+        r = requests.get(url, stream=True,  headers={'Cache-Control': "no-cache"})
+        if r.status_code == 200: # Se a resposta for bem sucedida
+            fpath = path + f"/grid_7d_mais_fogo_{i}.jpg"
+            with open(fpath, 'wb+') as f:
+                r.raw.decode_content = True
+                shutil.copyfileobj(r.raw, f)
+        else:
+            print(r.text)
+            raise Exception(r.status_code)     
+
 
 ################
 ### Execução ###
@@ -347,11 +442,16 @@ def main():
     
     times = ["24h"]
     land_types = ["uc", "ti"]
-    
+    path = f"{PROJECT_ROOT}/output/imgs/tweets/"
+
+    # Gera imagens de TIs e UCs
     for time in times:
         for land_type in land_types:
-            path = f"{PROJECT_ROOT}/output/imgs/tweets/"
-            get_static_images(path, time, land_type)
+            get_static_images_24h(path, time, land_type)
+
+
+    # Gera imagens do grid
+    get_static_images_7d(path)
 
 if __name__ == "__main__":
     main()
