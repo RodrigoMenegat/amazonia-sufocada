@@ -298,7 +298,7 @@ def build_thread_7d_grid(data):
     
     # Abre
     tweet = {
-        "text": (f"Olá! Hoje é dia do nosso relatório semanal, em que falamos sobre as regiões da Amazônia Legal que mais tiveram focos de calor entre hoje, {day}, e o último domingo. Acompanhe no fio 👇"),
+        "text": (f"Olá! Chegou o dia do nosso relatório semanal, em que falamos sobre as regiões da Amazônia Legal que mais tiveram focos de calor entre hoje, {day}, e o último domingo. Acompanhe no fio 👇"),
         "img": None
     }
     tweets.append(tweet)
