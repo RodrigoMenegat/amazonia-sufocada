@@ -566,7 +566,7 @@ def main(argv):
         db_exists = os.path.isfile(db_path)
         if not db_exists:
             print("> Creating main database")
-           full_db = build_original_database()
+            full_db = build_original_database()
 
         # Acessa e salva os arquivos recentes
         print("> Creating recent datasets")
