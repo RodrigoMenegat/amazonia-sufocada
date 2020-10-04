@@ -403,14 +403,14 @@ def build_thread_7d_grid(data):
 
     elif not grid_3_ti and grid_3_uc:
         tweet = {
-            "text": (f"Outras áreas também estão em situação crítica. A 3ª área que mais queima fica em {grid_3_cidade}, {grid_3_estado}. Há registro de fogo na região faz {grid_3_dias_consecutivos}. Ao menos parte dela está na unidade de conservação {grid_3_uc}."),
+            "text": (f"Por fim, a 3ª área que mais queima fica em {grid_3_cidade}, {grid_3_estado}. Há registro de fogo na região faz {grid_3_dias_consecutivos}. Ao menos parte dela está na unidade de conservação {grid_3_uc}."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_3.jpg"
         }
         tweets.append(tweet)
 
     elif grid_3_ti and grid_3_uc:
         tweet = {
-            "text": (f"Outras áreas também estão em situação crítica. A 3ª área que mais queima está no município de {grid_3_cidade}, {grid_3_estado}. Essa área queima há {grid_3_dias_consecutivos} dias consecutivos e partes dela ficam na unidade de conservação {grid_3_uc} e na terra indígena {grid_3_ti}."),
+            "text": (f"Por fim, a 3ª área que mais queima está no município de {grid_3_cidade}, {grid_3_estado}. Essa área queima há {grid_3_dias_consecutivos} dias consecutivos e partes dela ficam na unidade de conservação {grid_3_uc} e na terra indígena {grid_3_ti}."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_3.jpg"
         }
         tweets.append(tweet)
