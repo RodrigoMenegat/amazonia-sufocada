@@ -306,7 +306,7 @@ def build_thread_7d_grid(data):
 
     # Destaque das áreas
     tweet = {
-        "text": (f"No mapa abaixo, cada qudarado representa uma região de 20km². Quanto mais escura a área, mais focos de calor aconteceram lá dentro. Cada ponto representa uma das {total_semana} áreas de 375m² em que o satélite detectou atividade de fogo."),
+        "text": (f"No mapa abaixo, cada qudarado representa uma região de 20km². Quanto mais escuro ele estiver, mais focos de calor aconteceram lá dentro."),
         "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_todas_as_areas.jpg"
     }
     tweets.append(tweet)
@@ -329,21 +329,21 @@ def build_thread_7d_grid(data):
     # Área de destaque 1
     if not grid_1_ti and not grid_1_uc:
         tweet = {
-            "text": (f"A região com mais fogo está em destaque no mapa. Ela fica nos arredores de {grid_1_cidade}, {grid_1_estado} e faz parte do bioma {grid_1_bioma}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos."),
+            "text": (f"A região com mais fogo está em destaque no mapa. Ela fica nos arredores de {grid_1_cidade}, {grid_1_estado}, e faz parte do bioma {grid_1_bioma}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_1.jpg"
         }
         tweets.append(tweet)
 
     elif grid_1_ti and not grid_1_uc:
         tweet = {
-            "text": (f"A região com mais fogo está em destaque no mapa. Ela fica nos arredores de {grid_1_cidade}, {grid_1_estado} e faz parte do bioma {grid_1_bioma}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na terra indígena {grid_1_ti}."),
+            "text": (f"A região com mais fogo está em destaque no mapa. Ela fica nos arredores de {grid_1_cidade}, {grid_1_estado}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na terra indígena {grid_1_ti}."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_1.jpg"
         }
         tweets.append(tweet)
 
     elif not grid_1_ti and grid_1_uc:
         tweet = {
-            "text": (f"Veja no mapa a região com mais fogo, nos arredores de {grid_1_cidade}, {grid_1_estado} e faz parte do bioma {grid_1_bioma}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na unidade de conservação {grid_1_uc}."),
+            "text": (f"Veja no mapa a região com mais fogo, nos arredores de {grid_1_cidade}, {grid_1_estado}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na unidade de conservação {grid_1_uc}."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_1.jpg"
         }
         tweets.append(tweet)
@@ -359,21 +359,21 @@ def build_thread_7d_grid(data):
     # Área de destaque 2
     if not grid_2_ti and not grid_2_uc:
         tweet = {
-            "text": (f"Outras áreas também estão em situação crítica. A 2ª área que mais queima fica no município de {grid_2_cidade}, {grid_2_estado} e faz parte do bioma {grid_2_bioma}. Essa área está queimando há {grid_2_dias_consecutivos} dias consecutivos."),
+            "text": (f"Outras áreas também estão em situação crítica. A 2ª região que mais queima fica no município de {grid_2_cidade}, {grid_2_estado}, e faz parte do bioma {grid_2_bioma}. Essa área está queimando há {grid_2_dias_consecutivos} dias consecutivos."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_2.jpg"
         }
         tweets.append(tweet)
 
     elif grid_2_ti and not grid_2_uc:
         tweet = {
-            "text": (f"Outras áreas também estão em situação crítica. A 2ª área que mais queima fica no município de {grid_2_cidade}, {grid_2_estado} e faz parte do bioma {grid_2_bioma}. Essa área está queimando há {grid_2_dias_consecutivos} dias consecutivos. Ao menos parte dela fica na terra indígena {grid_2_ti}."),
+            "text": (f"Outras áreas também estão em situação crítica. A 2ª região que mais queima fica no município de {grid_2_cidade}, {grid_2_estado}. Essa área está queimando há {grid_2_dias_consecutivos} dias consecutivos. Ao menos parte dela fica na terra indígena {grid_2_ti}."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_2.jpg"
         }
         tweets.append(tweet)
 
     elif not grid_2_ti and grid_2_uc:
         tweet = {
-            "text": (f"Outras áreas também estão em situação crítica. A 2ª área que mais queima fica no município de {grid_2_cidade}, {grid_2_estado} e faz parte do bioma {grid_2_bioma}. Essa área está queimando há {grid_2_dias_consecutivos} dias consecutivos. Ao menos parte dela fica na unidade de conservação {grid_2_uc}."),
+            "text": (f"Outras áreas também estão em situação crítica. A 2ª região que mais queima fica no município de {grid_2_cidade}, {grid_2_estado}. Essa área está queimando há {grid_2_dias_consecutivos} dias consecutivos. Ao menos parte dela fica na unidade de conservação {grid_2_uc}."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_2.jpg"
         }
         tweets.append(tweet)
@@ -389,28 +389,28 @@ def build_thread_7d_grid(data):
     # Área de queimada 3
     if not grid_3_ti and not grid_3_uc:
         tweet = {
-            "text": (f"Por fim, a 3ª área com mais focos de calor fica em {grid_3_cidade}, {grid_3_estado} e faz parte do bioma {grid_3_bioma}. Há registo fogo na região faz {grid_3_dias_consecutivos} dias seguidos."),
+            "text": (f"Por fim, a 3ª área com mais focos de calor fica em {grid_3_cidade}, {grid_3_estado} e faz parte do bioma {grid_3_bioma}. Há registro de fogo na região faz {grid_3_dias_consecutivos} dias seguidos."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_3.jpg"
         }
         tweets.append(tweet)
 
     elif grid_3_ti and not grid_3_uc:
         tweet = {
-            "text": (f"Por fim, a 3ª área com mais focos de calor fica em {grid_3_cidade}, {grid_3_estado} e faz parte do bioma {grid_3_bioma}. Há registo fogo na região faz {grid_3_dias_consecutivos} dias seguido. Ao menos parte dessa área fica na terra indígena {grid_3_ti}."),
+            "text": (f"Por fim, a 3ª área com mais focos de calor fica em {grid_3_cidade}, {grid_3_estado}. Há registro de fogo na região faz {grid_3_dias_consecutivos} dias seguidos. Ao menos parte dessa área fica na terra indígena {grid_3_ti}."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_3.jpg"
         }
         tweets.append(tweet)
 
     elif not grid_3_ti and grid_3_uc:
         tweet = {
-            "text": (f"Outras áreas também estão em situação crítica. A 2ª área que mais queima fica no município de {grid_3_cidade}, {grid_3_estado} e faz parte do bioma {grid_3_bioma}. Essa área está queimando há {grid_3_dias_consecutivos} dias consecutivos e ao menos parte dela está na unidade de conservação {grid_3_uc}."),
+            "text": (f"Outras áreas também estão em situação crítica. A 3ª área que mais queima fica em {grid_3_cidade}, {grid_3_estado}. Há registro de fogo na região faz {grid_3_dias_consecutivos}. Ao menos parte dela está na unidade de conservação {grid_3_uc}."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_3.jpg"
         }
         tweets.append(tweet)
 
     elif grid_3_ti and grid_3_uc:
         tweet = {
-            "text": (f"Outras áreas também estão em situação crítica. A 2ª área que mais queima está no município de {grid_3_cidade}, {grid_3_estado}. Essa área queima há {grid_3_dias_consecutivos} dias consecutivos e partes dela ficam na undidade de conservação {grid_3_uc} e na terra indígena {grid_3_ti}."),
+            "text": (f"Outras áreas também estão em situação crítica. A 3ª área que mais queima está no município de {grid_3_cidade}, {grid_3_estado}. Essa área queima há {grid_3_dias_consecutivos} dias consecutivos e partes dela ficam na unidade de conservação {grid_3_uc} e na terra indígena {grid_3_ti}."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_3.jpg"
         }
         tweets.append(tweet)
