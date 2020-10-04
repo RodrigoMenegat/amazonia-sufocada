@@ -32,7 +32,7 @@ PROJECT_ROOT = dirname(abspath(dirname(__file__)))
 
 CONDA_PREFIX = os.environ["CONDA_PREFIX"] # path to the environment-specific utilities
 
-TIPPECANOE_PATH = abspath("/home/tippecanoe/tippecanoe")
+TIPPECANOE_PATH = "tippecanoe"#abspath("/home/tippecanoe/tippecanoe")
 
 TOKEN = mapbox_credentials.token
 
@@ -46,9 +46,13 @@ SOURCES = [
         ("amzsufocada-24h-ucs-most-fire", f"{PROJECT_ROOT}/output/jsons/tilesets/24h_uc_most_fire.json"),
         ("amzsufocada-7d", f"{PROJECT_ROOT}/output/jsons/tilesets/7d.json"),
         ("amzsufocada-bd-completo", f"{PROJECT_ROOT}/output/jsons/tilesets/bd_completo.json"),
-    ("amzsufocada-terras-indigenas", f"{PROJECT_ROOT}/output/jsons/land_info/terras_indigenas.json"),
-    ("amzsufocada-unidades-conserv", f"{PROJECT_ROOT}/output/jsons/land_info/unidades_de_conservacao.json"),
-    ("amzsufocada-biomas", f"{PROJECT_ROOT}/output/jsons/land_info/biomas.json"),
+        ("amzsufocada-terras-indigenas", f"{PROJECT_ROOT}/output/jsons/land_info/terras_indigenas.json"),
+        ("amzsufocada-unidades-conserv", f"{PROJECT_ROOT}/output/jsons/land_info/unidades_de_conservacao.json"),
+        ("amzsufocada-biomas", f"{PROJECT_ROOT}/output/jsons/land_info/biomas.json"),
+        ("amzsufocada-grid-20km", f"{PROJECT_ROOT}/output/jsons/land_info/grid_20km.json"),
+        ("amzsufocada-7d-grid-1", f"{PROJECT_ROOT}/output/jsons/tilesets/7d_grid_1.json"),
+        ("amzsufocada-7d-grid-2", f"{PROJECT_ROOT}/output/jsons/tilesets/7d_grid_2.json"),
+        ("amzsufocada-7d-grid-3", f"{PROJECT_ROOT}/output/jsons/tilesets/7d_grid_3.json")
 ]
 
 
@@ -69,9 +73,15 @@ def tippecanoe(source):
         > source: uma tupla no formato (nome-camada, caminho). Exemplo: ("amzsufocada-24h", "../output/jsons/tilesets/24h.json")
         '''
 
-        # Se o output já existir, passa --force. Se não, não
+        # O grid de 20km não sera passado ao tippecanoe. Usaremos o JSON puro.
+        if source[0] == "amzsufocada-grid-20km":
+            return
 
-        if source[0] in ["amzsufocada-24h-tis", "amzsufocada-24h-ucs", "amzsufocada-24h-ti-most-fire", "amzsufocada-24h-ucs-most-fire"]:
+        # Se o output já existir, passa --force. Se não, não
+        if source[0] in ["amzsufocada-24h-tis", "amzsufocada-24h-ucs", 
+                         "amzsufocada-24h-ti-most-fire", "amzsufocada-24h-ucs-most-fire",
+                         "amzsufocada-7d-grid-1", "amzsufocada-7d-grid-2", "amzsufocada-7d-grid-3",
+                        ]:
                 # Due to a weird bug, combining the --force and -r1 flags creates mbtiles files with zombie points. We will manually rename/remove the files
                 # to avoid this.
                 command = f"{TIPPECANOE_PATH} -zg -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}_new.mbtiles -l {source[0]} {source[1]} -b0 -r1  --drop-densest-as-needed"
@@ -121,7 +131,12 @@ def upload(source):
         > tileset: o tileset que deve ser criado ou atualizado
         '''
 
-        command = [f"{CONDA_PREFIX}/bin/mapbox", "upload", f"{USERNAME}.{source[0]}", f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles"]
+        # O grid de 20km é em formato JSON. Os demais, mbtiles
+        if source[0] == "amzsufocada-grid-20km":
+            command =  [f"{CONDA_PREFIX}/bin/mapbox", "upload", f"{USERNAME}.{source[0]}", f"{PROJECT_ROOT}/output/jsons/land_info/grid_20km.json"]
+
+        else:
+            command = [f"{CONDA_PREFIX}/bin/mapbox", "upload", f"{USERNAME}.{source[0]}", f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles"]
 
         print(command)
         result = subprocess.run(command, env={"MAPBOX_ACCESS_TOKEN": TOKEN}, capture_output=True, check=True)
