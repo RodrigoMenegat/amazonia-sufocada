@@ -270,7 +270,7 @@ def build_thread_7d_grid(data):
     grid_1_estado = data["grid"]["areas_mais_fogo_7d"]["1"]["estado"]
     grid_1_bioma = data["grid"]["areas_mais_fogo_7d"]["1"]["nome_bioma"]
     grid_1_ti = data["grid"]["areas_mais_fogo_7d"]["1"]["nome_ti"]
-    grid_1_uc = data["grid"]["areas_mais_fogo_7d"]["1"]["nome_uc"]
+    grid_1_uc = data["grid"]["areas_mais_fogo_7d"]["1"]["nome_uc_curto"]
 
 
     # Destaque 2
@@ -280,7 +280,7 @@ def build_thread_7d_grid(data):
     grid_2_estado = data["grid"]["areas_mais_fogo_7d"]["2"]["estado"]
     grid_2_bioma = data["grid"]["areas_mais_fogo_7d"]["2"]["nome_bioma"]
     grid_2_ti = data["grid"]["areas_mais_fogo_7d"]["2"]["nome_ti"]
-    grid_2_uc = data["grid"]["areas_mais_fogo_7d"]["2"]["nome_uc"]
+    grid_2_uc = data["grid"]["areas_mais_fogo_7d"]["2"]["nome_uc_curto"]
 
 
     # Destaque 3
@@ -290,7 +290,7 @@ def build_thread_7d_grid(data):
     grid_3_estado = data["grid"]["areas_mais_fogo_7d"]["3"]["estado"]
     grid_3_bioma = data["grid"]["areas_mais_fogo_7d"]["3"]["nome_bioma"]
     grid_3_ti = data["grid"]["areas_mais_fogo_7d"]["3"]["nome_ti"]
-    grid_3_uc = data["grid"]["areas_mais_fogo_7d"]["3"]["nome_uc"]
+    grid_3_uc = data["grid"]["areas_mais_fogo_7d"]["3"]["nome_uc_curto"]
 
 
     # Conteúdo do fio
