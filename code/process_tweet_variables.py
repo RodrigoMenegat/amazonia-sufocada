@@ -324,8 +324,8 @@ def find_values_7d():
         # Quantos desses estão em unidades de conservação?
         grids_conservation_unit = grids_most_fire[~grids_most_fire.cod_uc.isna()].shape[0]
 
+        # E quantos estão em um ou em outro?
         grids_protected_areas = grids_most_fire[(~grids_most_fire.cod_uc.isna()) | (~grids_most_fire.cod_ti.isna())].shape[0]
-
 
         return {
             "em_tis": grids_ind_land,
