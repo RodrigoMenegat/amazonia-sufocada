@@ -383,7 +383,7 @@ def find_values_7d():
             "id": id_,
             "n_focos": n_focos,
             "porcentagem": porcentagem,
-            "dias_consecutivos": dias_consecutivos,
+            "dias_consecutivos": int(dias_consecutivos),
             "cidade": cidade,
             "estado": estado,
             "nome_ti": nome_ti,
