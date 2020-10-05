@@ -316,7 +316,7 @@ def build_thread_7d_grid(data):
     if total_focos_areas_protegidas > 0:
         tweet = {
             "text": (f"Das dez regiões com mais fogo nos últimos sete dias, {total_focos_areas_protegidas} estão nos arredores ou no interior de unidadades de conservação ou terras indígenas."),
-            "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_todas_as_areas.jpg"
+            "img": None
         }
         tweets.append(tweet)
     else:
