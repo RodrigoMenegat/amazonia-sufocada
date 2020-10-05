@@ -432,7 +432,7 @@ def build_thread_7d_grid(data):
 
     # Link out
     tweet = {
-            "text": (f"Você pode ver mais detalhes na página especial do Amazônia Sufocada e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2020."),
+            "text": (f"Você pode ver mais detalhes na página especial do Amazônia Sufocada e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2020.\n\nhttps://infoamazonia.org/sufocada"),
             "img": None
         }
     tweets.append(tweet)
