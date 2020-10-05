@@ -316,7 +316,7 @@ def find_values_7d():
         '''
 
         # Seleciona os dez grids com mais foco
-        grids_most_fire = GRID_FIRE_DATA.sort_values(by=f"focos_{time}").head(n)
+        grids_most_fire = GRID_FIRE_DATA.sort_values(by=f"focos_{time}", ascending=False).head(n)
 
         # Quantos desses estão em terras indígenas?
         grids_ind_land = grids_most_fire[~grids_most_fire.cod_ti.isna()].shape[0]
@@ -324,8 +324,8 @@ def find_values_7d():
         # Quantos desses estão em unidades de conservação?
         grids_conservation_unit = grids_most_fire[~grids_most_fire.cod_uc.isna()].shape[0]
 
-        grids_protected_areas = grids_most_fire[(~grids_most_fire.cod_uc.isna()) | ~grids_most_fire.cod_ti.isna()].shape[0]
-
+        # E quantos estão em um ou em outro?
+        grids_protected_areas = grids_most_fire[(~grids_most_fire.cod_uc.isna()) | (~grids_most_fire.cod_ti.isna())].shape[0]
 
         return {
             "em_tis": grids_ind_land,
@@ -354,7 +354,7 @@ def find_values_7d():
         '''
         
         # Seleciona o grid com mais fogo
-        grid_most_fire = GRID_FIRE_DATA.sort_values(by=f"focos_{time}", ascending = False).reset_index().loc[position-1]
+        grid_most_fire = GRID_FIRE_DATA.sort_values(by=f"focos_{time}", ascending=False).reset_index().loc[position-1]
         
         # Pega as informações básicas
         id_ = grid_most_fire["cod_box"]
