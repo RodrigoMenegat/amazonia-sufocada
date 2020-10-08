@@ -4,7 +4,7 @@ por process_tweet_variables.py e process_tweet_images.py
 e salva arquivos JSON com os fios que serão publicados por tweet.py
 '''
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 import os
 
@@ -257,11 +257,27 @@ def build_thread_7d_grid(data):
 
     # Definição de variáveis
 
+    # Datas
+    today = datetime.now()
+    last_week_date = today - timedelta(days=8) # O cálculo é sempre para oito dias antes, então
+                                               # o texto dos tweets só estará correto na data
+                                               # de publicação, às segundas-feiras.
+
+
+    # Formato DD/MM/YY
+    today = today.strftime("%d/%m/%Y")
+    last_week_date = last_week_date.strftime("%d/%m/%Y")
+
     # Gerais
-    day = datetime.now().strftime("%d/%m/%Y")
+
     total_geral = data["total_focos_amazonia_legal_2020"]
     total_semana = data["total_focos_7d"]
-    total_focos_areas_protegidas = data["grid"]["fogo_em_areas_protegidas"]["total"]
+    total_focos_7d_uc = data["total_focos_7d_uc"]
+    total_focos_7d_uc_pp = round(total_focos_7d_uc / total_semana * 100)
+    total_focos_7d_ti = data["total_focos_7d_ti"] 
+    total_focos_7d_ti_pp = round(total_focos_7d_ti / total_semana * 100)
+
+
 
     # Destaque 1
     grid_1_n_focos = data["grid"]["areas_mais_fogo_7d"]["1"]["n_focos"]
@@ -298,7 +314,14 @@ def build_thread_7d_grid(data):
     
     # Abre
     tweet = {
-        "text": (f"Olá! Chegou o dia do nosso relatório semanal, em que falamos sobre as regiões da Amazônia Legal que mais tiveram focos de calor entre hoje, {day}, e o último domingo. Acompanhe no fio 👇"),
+        "text": (f"Olá! Chegou o dia do nosso relatório semanal, em que falamos sobre as regiões da Amazônia Legal que mais tiveram focos de calor na semana passada, entre o domingo de {last_week_date}, e ontem. Acompanhe no fio 👇"),
+        "img": None
+    }
+    tweets.append(tweet)
+
+    # Quantas estão em regiões protegidas?
+    tweet = {
+        "text": (f"De todos os focos de fogo registrados nos últimos sete dias, {total_focos_7d_ti_pp}% aconteceram dentro de terras indígenas e {total_focos_7d_uc_pp}% aconteceram em unidades de conservação."),
         "img": None
     }
     tweets.append(tweet)
@@ -306,51 +329,37 @@ def build_thread_7d_grid(data):
 
     # Destaque das áreas
     tweet = {
-        "text": (f"No mapa abaixo, cada qudarado representa uma região de 20km². Quanto mais escuro ele estiver, mais focos de calor aconteceram lá dentro."),
+        "text": (f"No mapa abaixo, calda qudarado representa uma região de 20km² com ao menos um foco de calor registrado na semana. Quanto mais roxo ele estiver, mais focos de calor aconteceram lá dentro."),
         "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_todas_as_areas.jpg"
     }
     tweets.append(tweet)
 
 
-    # Quantas estão em regiões protegidas?
-    if total_focos_areas_protegidas > 0:
-        tweet = {
-            "text": (f"Das dez regiões com mais fogo nos últimos sete dias, {total_focos_areas_protegidas} estão nos arredores ou no interior de unidadades de conservação ou terras indígenas."),
-            "img": None
-        }
-        tweets.append(tweet)
-    else:
-        tweet = {
-            "text": (f"Das dez regiões com mais fogo nos últimos sete dias, nenhuma está nos arredores ou no interior de unidadades de conservação ou de terras indígenas."),
-            "img": None
-        }
-        tweets.append(tweet)
-
     # Área de destaque 1
     if not grid_1_ti and not grid_1_uc:
         tweet = {
-            "text": (f"A região com mais fogo está em destaque no mapa. Ela fica nos arredores de {grid_1_cidade}, {grid_1_estado}, e faz parte do bioma {grid_1_bioma}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos."),
+            "text": (f"A região com mais fogo está em destaque no mapa, com os focos em amarelo. Ela fica nos arredores de {grid_1_cidade}, {grid_1_estado}, e faz parte do bioma {grid_1_bioma}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_1.jpg"
         }
         tweets.append(tweet)
 
     elif grid_1_ti and not grid_1_uc:
         tweet = {
-            "text": (f"A região com mais fogo está em destaque no mapa. Ela fica nos arredores de {grid_1_cidade}, {grid_1_estado}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na terra indígena {grid_1_ti}."),
+            "text": (f"A região com mais fogo está em destaque no mapa, com os focos em amarelo. Ela fica nos arredores de {grid_1_cidade}, {grid_1_estado}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na terra indígena {grid_1_ti}."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_1.jpg"
         }
         tweets.append(tweet)
 
     elif not grid_1_ti and grid_1_uc:
         tweet = {
-            "text": (f"Veja no mapa a região com mais fogo, nos arredores de {grid_1_cidade}, {grid_1_estado}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na unidade de conservação {grid_1_uc}."),
+            "text": (f"Veja no mapa a região com mais fogo, nos arredores de {grid_1_cidade}, {grid_1_estado}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na unidade de conservação {grid_1_uc}. Pontos amarelos representam focos de calor."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_1.jpg"
         }
         tweets.append(tweet)
 
     elif grid_1_ti and grid_1_uc:
         tweet = {
-            "text": (f"Veja no mapa a região com mais fogo, perto de {grid_1_cidade}, {grid_1_estado}. Essa área queima há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na unidade de conservação {grid_1_uc} e na terra indígena {grid_1_ti}."),
+            "text": (f"Veja no mapa a região com mais fogo, perto de {grid_1_cidade}, {grid_1_estado}. Essa área queima há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na unidade de conservação {grid_1_uc} e na terra indígena {grid_1_ti}. Pontos amarelos representam focos de calor."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_1.jpg"
         }
         tweets.append(tweet)
@@ -418,7 +427,7 @@ def build_thread_7d_grid(data):
 
     # Metodologia
     tweet = {
-            "text": (f"Para identificar as áreas listadas, dividimos o território da Amazônia Legal em uma grade de retângulos de cerca de 20km². As áreas com mais fogo são aquelas que tiveram mais focos de calor detctados pelo satélite S-NPP, da NASA, entre o último domingo e hoje, {day}."),
+            "text": (f"Para identificar as áreas listadas, dividimos o território da Amazônia Legal em uma grade de quadrados de cerca de 20km². As áreas com mais fogo são aquelas que tiveram mais focos de calor detctados pelo satélite S-NPP, da NASA, entre ontem e o domingo anterior, {last_week_date}."),
             "img": None
         }
     tweets.append(tweet)
