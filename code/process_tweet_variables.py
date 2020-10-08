@@ -408,6 +408,8 @@ def find_values_7d():
     return {
         "total_focos_amazonia_legal_2020": DF_FULL.shape[0],
         "total_focos_7d": DF_7D.shape[0],
+        "total_focos_7d_uc": DF_7D[~DF_7D.cod_uc.isna()].shape[0],
+        "total_focos_7d_ti": DF_7D[~DF_7D.cod_ti.isna()].shape[0],
         "grid": grid,
     }
 

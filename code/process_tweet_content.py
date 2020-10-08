@@ -329,7 +329,7 @@ def build_thread_7d_grid(data):
 
     # Destaque das áreas
     tweet = {
-        "text": (f"No mapa abaixo, calda qudarado representa uma região de 20km² com ao menos um foco de calor registrado na semana. Quanto mais roxo ele estiver, mais focos de calor aconteceram lá dentro."),
+        "text": (f"No mapa abaixo, cada quadrado representa uma região de 20km² com ao menos um foco de calor registrado na semana. Quanto mais roxo ele estiver, mais focos de calor aconteceram lá dentro."),
         "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_todas_as_areas.jpg"
     }
     tweets.append(tweet)
@@ -338,14 +338,14 @@ def build_thread_7d_grid(data):
     # Área de destaque 1
     if not grid_1_ti and not grid_1_uc:
         tweet = {
-            "text": (f"A região com mais fogo está em destaque no mapa, com os focos em amarelo. Ela fica nos arredores de {grid_1_cidade}, {grid_1_estado}, e faz parte do bioma {grid_1_bioma}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos."),
+            "text": (f"A região com mais fogo está em destaque no mapa, com focos de calor em amarelo. Ela fica nos arredores de {grid_1_cidade}, {grid_1_estado}, e faz parte do bioma {grid_1_bioma}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_1.jpg"
         }
         tweets.append(tweet)
 
     elif grid_1_ti and not grid_1_uc:
         tweet = {
-            "text": (f"A região com mais fogo está em destaque no mapa, com os focos em amarelo. Ela fica nos arredores de {grid_1_cidade}, {grid_1_estado}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na terra indígena {grid_1_ti}."),
+            "text": (f"A região com mais fogo está em destaque no mapa, com focos de calor em amarelo. Ela fica nos arredores de {grid_1_cidade}, {grid_1_estado}. Essa área está queimando há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na terra indígena {grid_1_ti}."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_1.jpg"
         }
         tweets.append(tweet)
@@ -359,7 +359,7 @@ def build_thread_7d_grid(data):
 
     elif grid_1_ti and grid_1_uc:
         tweet = {
-            "text": (f"Veja no mapa a região com mais fogo, perto de {grid_1_cidade}, {grid_1_estado}. Essa área queima há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na unidade de conservação {grid_1_uc} e na terra indígena {grid_1_ti}. Pontos amarelos representam focos de calor."),
+            "text": (f"Veja no mapa a região com mais fogo, perto de {grid_1_cidade}, {grid_1_estado}. Essa área queima há {grid_1_dias_consecutivos} dias consecutivos. Ao menos parte dela está na unidade de conservação {grid_1_uc} e na terra indígena {grid_1_ti}. Pontos amarelos são focos de calor."),
             "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_mais_fogo_1.jpg"
         }
         tweets.append(tweet)
