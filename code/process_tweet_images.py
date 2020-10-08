@@ -394,7 +394,7 @@ def get_static_images_7d(path):
 
         # Transforma em um arquivo GeoJSON
         overlay = json.loads(
-            overlay.head(1).geometry.simplify(.05).to_json() # Isso é uma string simples em formato json
+            overlay.head(1).geometry.to_json() # Isso é uma string simples em formato json
         )
 
         # Adiciona geojson customizado no padrão simplestyle-spec do Mapbox
