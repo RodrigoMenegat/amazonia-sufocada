@@ -189,7 +189,7 @@ def fill_data(datapoints):
 
     # Remove as entradas de fogo duplicadas. São poucas, causadas por problemas de sobreposição
     # no shapefile de unidades de conservação, que fazem um ponto estar contido em duas UCs ao mesmo tempo.
-    datapoints = datapoints.drop_duplicates(subset="uuid")
+    # datapoints = datapoints.drop_duplicates(subset="uuid")
 
     # Renomeia as colunas 'left'
     datapoints = datapoints.rename(columns={
@@ -292,6 +292,9 @@ def time_format(df):
     # Formato o horário para fazer sentido
     df["data"] = pd.to_datetime(df["data"], format="%Y-%m-%d")
     df["hora"] = pd.to_datetime(df["hora"], format="%H%M").dt.time
+    df["dia"] =  df.data.dt.day
+    df["mes"] =  df.data.dt.month
+    df["ano"] =  df.data.dt.year
 
     return df
 
@@ -319,7 +322,13 @@ def uuid_fires(df):
 def build_original_database():
     '''
     Lê os arquivos baixados manualmente do site da NASA
-    e salva o dataframe resultante.
+    e salva o dataframe resultante. Retorna dois dataframes:
+    um já sem duplicatas, para plotar os tilesets do total de fogo
+    em toda a Amazônia, e outro com as duplicatas, que serão usadas para 
+    computar o total de focos de fogo em cada território. 
+    Essas duplicatas existem porque alguns territórios tem áreas que se sobrepõem,
+    então é possível que um foco esteja em dois territórios do mesmo tipo ao mesmo
+    tempo.
     '''
 
     # Lê arquivos com campos em um tipo específico
@@ -349,7 +358,7 @@ def build_original_database():
 
     # Mantém apenas as colunas relevantes
     df = df[[
-                "uuid", "data", "hora", "date_diff", "latitude", "longitude",
+                "uuid", "data", "hora", "dia", "mes", "ano", "date_diff", "latitude", "longitude",
                 "cod_cidade", "cidade", "cod_estado", "estado",
                 "cod_ti", "nome_ti", "nome_etnia",
                 "cod_bioma", "nome_bioma",
@@ -358,18 +367,27 @@ def build_original_database():
                 "cod_box"
             ]]
 
+    # Mantém um banco de dados com as duplicatas para calcular os tilesets de terra posteriormente
+    df_dups = df.copy()
+
     df = sanitize_duplicates(df, "bd_completo")
 
     # Salva como CSV
     save_csv(df, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo.csv")
+    #save_csv(df_dups, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo_com_duplicatas.csv")
 
-    # # Salva como Feather
+
+    # Salva como Feather
     save_feather(df,  f"{PROJECT_ROOT}/output/feathers/tilesets/bd_completo.feather")
+    save_feather(df_dups, f"{PROJECT_ROOT}/output/feathers/tilesets/bd_completo_com_duplicatas.feather")
+
 
     # Salva como GeoJSON
     save_geojson(df,  f"{PROJECT_ROOT}/output/jsons/tilesets/bd_completo.json")
+    #save_geojson(df_dups, f"{PROJECT_ROOT}/output/jsons/tilesets/bd_completo_com_duplicatas.json")
 
-    return df
+
+    return df, df_dups
 
 
 def fetch_recent_data():
@@ -412,7 +430,7 @@ def fetch_recent_data():
 
         # Mantém apenas as colunas relevantes
         df = df[[
-                    "uuid", "data", "hora", "date_diff", "latitude", "longitude",
+                    "uuid", "data", "hora", "dia", "mes", "ano", "date_diff", "latitude", "longitude",
                     "cod_cidade", "cidade", "cod_estado", "estado",
                     "cod_ti", "nome_ti", "nome_etnia",
                     "cod_bioma", "nome_bioma",
@@ -422,25 +440,32 @@ def fetch_recent_data():
                 ]]
 
         # Lida com duplicatas
+
+        # Mantém um banco de dados com as duplicatas para calcular os tilesets de terra posteriormente
+        df_dups = df.copy()
+
         df = sanitize_duplicates(df, time)
 
         # Adiciona dados ao dicionário
         dfs[time] = df
+        dfs[f"{time}_dups"] = df_dups
 
         # Salva como CSV
         save_csv(df, f"{PROJECT_ROOT}/output/csvs/tilesets/{time}.csv")
 
         # Salva como Feather
         save_feather(df, f"{PROJECT_ROOT}/output/feathers/tilesets/{time}.feather")
+        save_feather(df_dups, f"{PROJECT_ROOT}/output/feathers/tilesets/{time}_com_duplicatas.feather")
+
 
         # Salva como GeoJSON
         save_geojson(df, f"{PROJECT_ROOT}/output/jsons/tilesets/{time}.json")
 
     # Retorna os dataframes para usar no resto dos processos
-    return dfs["24h"], dfs["7d"]
+    return dfs["24h"], dfs["24h_dups"], dfs["7d"], dfs["7d_dups"]
 
 
-def update_original_database(new_data):
+def update_original_database(new_data, new_data_dups):
 
     '''
     Adiciona os dados das últimas 24h 
@@ -450,29 +475,44 @@ def update_original_database(new_data):
 
     # Lê o banco de dados original em formato feather
     gdf = gpd.read_feather( f"{PROJECT_ROOT}/output/feathers/tilesets/bd_completo.feather")
+    gdf_dups = gpd.read_feather( f"{PROJECT_ROOT}/output/feathers/tilesets/bd_completo_com_duplicatas.feather")
 
-    # Concatena com os novos dados
-    gdf = pd.concat((gdf, new_data))
 
-    # Mantém apenas os dados do último ano
-    year = datetime.datetime.now().year
-    gdf["datetime"] = pd.to_datetime(gdf.data)
-    gdf = gdf[gdf.datetime.dt.year == year]
-    gdf = gdf.drop("datetime", axis=1)
+    for datapoints, updates, label in zip([gdf, gdf_dups], 
+                                   [new_data, new_data_dups],
+                                   ["clean", "duplicated"]):
 
-    # Reindexa
-    gdf = gdf.reset_index(drop=True)
+        # Concatena com os novos dados
+        datapoints = pd.concat((gdf, updates))
 
-    # Salva como CSV
-    save_csv(gdf, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo.csv")
+        # Mantém apenas os dados do último ano
+        year = datetime.datetime.now().year
 
-    # Salva como Feather
-    save_feather(gdf, f"{PROJECT_ROOT}/output/feathers/tilesets/bd_completo.feather")
+        datapoints["datetime"] = pd.to_datetime(datapoints.data)
+        datapoints = datapoints[datapoints.datetime.dt.year == year]
+        datapoints = datapoints.drop("datetime", axis=1)
 
-    # Salva como GeoJSON
-    save_geojson(gdf, f"{PROJECT_ROOT}/output/jsons/tilesets/bd_completo.json")
+        # Reindexa
+        datapoints = datapoints.reset_index(drop=True)
 
-    return gdf
+        # Salva como CSV
+        if label == "clean":
+            save_csv(datapoints, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo.csv")
+            save_feather(datapoints,  f"{PROJECT_ROOT}/output/feathers/tilesets/bd_completo.feather")
+            save_geojson(datapoints,  f"{PROJECT_ROOT}/output/jsons/tilesets/bd_completo.json")
+
+            # Salva os dados sem duplicatas em uma variável
+            gdf = datapoints.copy()
+
+        elif label == "duplicated":
+            #save_csv(datapoints, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo_com_duplicatas.csv")
+            save_feather(datapoints, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo_com_duplicatas.feather")
+            #save_geojson(datapoints, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo_com_duplicatas.geojson")
+
+            # E os dados com duplicatas em outras
+            gdf_dups = datapoints.copy()
+
+    return gdf, gdf_dups
 
 
 # Atualiza os bancos de dados estáticos de terras indígenas e unidades de conservação
@@ -584,22 +624,22 @@ def main(argv):
         db_exists = os.path.isfile(db_path)
         if not db_exists:
             print("> Creating main database")
-            full_db = build_original_database()
+            full_db, full_db_dups = build_original_database()
 
         # Acessa e salva os arquivos recentes
         print("> Creating recent datasets")
-        df_24h, df_7d = fetch_recent_data()
+        df_24h, df_24h_dups, df_7d, df_7d_dups = fetch_recent_data()
 
         # Adiciona os dados das últimas 24h ao banco de dados e salva
         if not setup:
             print("> Updating main database")
-            full_db = update_original_database(df_24h)
+            full_db, full_db_dups = update_original_database(df_24h, df_24h_dups)
 
         # TO DO: filtra os dados de full_db para manter apenas entradas do ano corrente
 
         # Cria arquivos com os dados estáticos sobre terras indígenas e unidades de conservação
         print("> Creating land databases")
-        update_land_datasets(df_24h, df_7d, full_db)
+        update_land_datasets(df_24h_dups, df_7d_dups, full_db_dups)
         
     except Exception as e:
         
