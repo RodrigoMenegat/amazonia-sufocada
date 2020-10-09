@@ -49,6 +49,7 @@ SOURCES = [
         ("amzsufocada-terras-indigenas", f"{PROJECT_ROOT}/output/jsons/land_info/terras_indigenas.json"),
         ("amzsufocada-unidades-conserv", f"{PROJECT_ROOT}/output/jsons/land_info/unidades_de_conservacao.json"),
         ("amzsufocada-biomas", f"{PROJECT_ROOT}/output/jsons/land_info/biomas.json"),
+        ("amzusofcada-cidades", f"{PROJECT_ROOT}/output/jsons/land_info/cidades.json"),
         ("amzsufocada-grid-20km", f"{PROJECT_ROOT}/output/jsons/land_info/grid_20km.json"),
         ("amzsufocada-7d-grid-1", f"{PROJECT_ROOT}/output/jsons/tilesets/7d_grid_1.json"),
         ("amzsufocada-7d-grid-2", f"{PROJECT_ROOT}/output/jsons/tilesets/7d_grid_2.json"),
@@ -98,7 +99,7 @@ def tippecanoe(source):
                 # Rename the new one
                 os.rename(f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}_new.mbtiles", f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles")
 
-        elif source[0] in ["amzsufocada-terras-indigenas", "amzsufocada-unidades-conserv", "amzsufocada-biomas"]:
+        elif source[0] in ["amzsufocada-terras-indigenas", "amzsufocada-unidades-conserv", "amzsufocada-biomas", "amzsufocada-cidades"]:
                 # Tippecanoe needs a buffer to avoid lines in the tile boundaries of polygons
                 command = f"{TIPPECANOE_PATH} -zg --force -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles -l {source[0]} {source[1]}  --drop-densest-as-needed"
 
