@@ -354,18 +354,33 @@ def featherize_sources():
     ### Unidades de conservação ###
     ###############################
 
-    con_units = gpd.read_file(f"{in_path}/unidades_de_conservacao", encoding='utf8')
+    # Base de dados do MMA com todas as unidades de conservação do país
+    # http://mapas.mma.gov.br/i3geo/datadownload.htm
+    con_units = gpd.read_file(f"{in_path}/unidades_de_conservacao")
+
+    # Mantém apenas o que está nos contornos da Amazônia Legal
+    con_units = con_units[con_units.geometry.intersects(amz_outline)]
+
+    # Corta para remover partes de UCs que estão fora da Amazônia Legal
+    con_units["geometry"] = gpd.clip(con_units.geometry.buffer(0), amz_outline)
 
     columns = {
         "NOME_UC1": "nome_uc",
-        "ID_WCMC2": "cod_uc",
+        "ID_UC0": "cod_uc",
         "CATEGORI3": "cat_uc",
-        "geometry": "geometry"
+        "geometry": "geometry",
+        "ESFERA5": "esfera",
+        "ANO_CRIA6": "ano_criacao"
     }
 
+    # Renomeia e mantém colunas relevantes
     con_units = con_units.rename(columns=columns)
     con_units = con_units.drop([item for item in con_units.columns if item not in columns.values()], axis=1)
-    con_units.nome_uc = con_units.nome_uc.str.title()
+    
+    # Coloca campos em titlecase
+    con_units["nome_uc"] = con_units.nome_uc.str.title()
+    con_units["esfera"] = con_units.esfera.str.title()
+
 
     # Adiciona um código identificador para unidades de conservação que não tem um
     con_units["cod_uc"] = con_units["cod_uc"].apply(lambda x: uuid.uuid4().hex if x is None else x)
@@ -375,6 +390,12 @@ def featherize_sources():
     con_units["nome_uc_sem_cat"] = con_units.apply(extract_name_without_category, axis=1)
     con_units["biomas"] = con_units.apply(add_biomes, args=(biomes,), axis=1)
     con_units[["cidade", "estado"]] = con_units.apply(add_cities, args=(cities,), axis=1)
+
+
+    # Reseta índice
+    con_units = con_units.reset_index(drop=True)
+
+    # Salva
     con_units.to_feather(f"{out_path}/unidades_de_conservacao.feather")
 
     ########################
@@ -397,8 +418,8 @@ def featherize_sources():
     ind_lands = ind_lands.drop([item for item in ind_lands.columns if item not in columns.values()], axis=1)
     ind_lands = ind_lands[ind_lands.geometry.intersects(amz_outline)].reset_index(drop=True)
 
-    # Mantém apenas terras que já tenham sido efetivamente delimitadas
-    ind_lands = ind_lands[~ind_lands.fase_ti.isin(('Declarada', 'Em Estudo'))]
+    # Mantém apenas terras que já tenham sido efetivamente delimitadas -- a não ser que elas estejam marcadas com 'restrição de uso'
+    ind_lands = ind_lands[~(ind_lands.fase_ti.isin(('Declarada', 'Em Estudo'))) | (ind_lands.nome_ti.str.contains("restrição"))]
 
     # Adiciona campos customizados
     ind_lands["biomes"] = ind_lands.apply(add_biomes, args=(biomes,), axis=1)
