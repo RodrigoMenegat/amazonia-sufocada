@@ -39,7 +39,9 @@ GRID = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/grid_20km.feath
 INDIGENOUS_LAND = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/terras_indigenas.feather")
 LEGAL_AMAZON = gpd.read_feather(f"{PROJECT_ROOT}/output/feathers/sources/limites_amazonia_legal.feather")
 
+# Conversão de CRS
 GRID.crs = LEGAL_AMAZON.crs
+CONSERVATION_UNITS.crs = LEGAL_AMAZON.crs
 
 ###############
 ### Helpers ###
@@ -172,7 +174,7 @@ def fill_data(datapoints):
 
     # Mantém apenas algumas colunas especificas dos bancos de dados estáticos
     indigen_cols = ["cod_ti", "nome_ti", "nome_etnia", "geometry"]
-    conserv_cols = ["nome_uc", "cod_uc", "cat_uc",  "geometry"]
+    conserv_cols = ["nome_uc", "cod_uc", "cat_uc", "ano_criacao", "esfera", "geometry"]
     grid_cols = ["cod_box", "geometry"]
 
     datapoints = gpd.sjoin(datapoints, CITIES, how=how, op=op).drop("index_right", axis=1)
@@ -452,6 +454,13 @@ def update_original_database(new_data):
     # Concatena com os novos dados
     gdf = pd.concat((gdf, new_data))
 
+    # Mantém apenas os dados do último ano
+    year = datetime.datetime.now().year
+    gdf["datetime"] = pd.to_datetime(gdf.data)
+    gdf = gdf[gdf.datetime.dt.year == year]
+    gdf = gdf.drop("datetime", axis=1)
+
+    # Reindexa
     gdf = gdf.reset_index(drop=True)
 
     # Salva como CSV
@@ -471,7 +480,7 @@ def update_land_datasets(df_24h, df_7d, full_db):
     
     # Por quais colunas vamos agregar?
     # Cada resultado vai ser salvo em um arquivo diferente
-    columns = ["cod_ti", "cod_uc", "cod_bioma", "cod_box"]
+    columns = ["cod_ti", "cod_uc", "cod_bioma", "cod_box", "cod_cidade"]
 
     # Essas são as agregações temporais que faremos
     # e seus respectivos dataframes
@@ -533,6 +542,15 @@ def update_land_datasets(df_24h, df_7d, full_db):
             save_csv(gpby, f"{PROJECT_ROOT}/output/csvs/land_info/grid_20km.csv")
             save_geojson(gpby, f"{PROJECT_ROOT}/output/jsons/land_info/grid_20km.json")
 
+        elif column == "cod_cidade":
+
+
+            gpby = CITIES.merge(gpby, on=column, how="left")
+
+            save_feather(gpby, f"{PROJECT_ROOT}/output/feathers/land_info/cidades.feather")
+            save_csv(gpby, f"{PROJECT_ROOT}/output/csvs/land_info/cidades.csv")
+            save_geojson(gpby, f"{PROJECT_ROOT}/output/jsons/land_info/cidades.json")
+
 
 #################
 ### Execution ###
@@ -576,6 +594,8 @@ def main(argv):
         if not setup:
             print("> Updating main database")
             full_db = update_original_database(df_24h)
+
+        # TO DO: filtra os dados de full_db para manter apenas entradas do ano corrente
 
         # Cria arquivos com os dados estáticos sobre terras indígenas e unidades de conservação
         print("> Creating land databases")
