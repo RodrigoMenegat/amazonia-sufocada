@@ -14,7 +14,7 @@ import uuid
 import warnings 
 
 warnings.filterwarnings('ignore', message='.*initial implementation of Parquet.*') # Aviso de versão inicial do feather
-
+pd.options.mode.chained_assignment = None  # default='warn'
 
 ###########################
 ### Rename os functions ###
@@ -330,22 +330,13 @@ def featherize_sources():
     biomes = gpd.read_file(f"{in_path}/biomas_amazonia_legal")
 
     # Remove colunas
-    biomes = biomes[["NOM_BIOMA", "ID1", "geometry"]]
+    biomes = biomes[["NOM_BIOMA", "COD_BIOMA", "geometry"]]
 
     # Renomeia campos para nosso padrão
-    biomes = biomes.rename(columns={"ID1":"cod_bioma", "NOM_BIOMA": "nome_bioma"})
+    biomes = biomes.rename(columns={"COD_BIOMA":"cod_bioma", "NOM_BIOMA": "nome_bioma"})
 
     # Transforma campo de id em string
     biomes["cod_bioma"] = biomes["cod_bioma"].astype(int).astype(str)
-
-    # Renomeia alguns biomas para facilitar compreensão
-    biomes.loc[0, "nome_bioma"] = "Amazônia"
-    biomes.loc[1, "nome_bioma"] = "Massa D'Água Costeira"
-    biomes.loc[2, "nome_bioma"] = "Massa D'Água Continental"
-
-    # Remove biomas de Massa D'Água
-    biomes = biomes[~biomes.nome_bioma.isin(["Massa D'Água Costeira", "Massa D'Água Continental"])]
-    biomes = biomes.reset_index(drop=True)
 
     biomes.to_feather(f"{out_path}/biomas_amazonia_legal.feather")
 
@@ -418,8 +409,14 @@ def featherize_sources():
     ind_lands = ind_lands.drop([item for item in ind_lands.columns if item not in columns.values()], axis=1)
     ind_lands = ind_lands[ind_lands.geometry.intersects(amz_outline)].reset_index(drop=True)
 
-    # Mantém apenas terras que já tenham sido efetivamente delimitadas -- a não ser que elas estejam marcadas com 'restrição de uso'
-    ind_lands = ind_lands[~(ind_lands.fase_ti.isin(('Declarada', 'Em Estudo'))) | (ind_lands.nome_ti.str.contains("restrição"))]
+    # Trata as terras com padrão "restrição de uso" no nome
+    pattern ="\(\s?restrição\s?(de)?\s?uso\s?\)"
+
+    to_change = ind_lands[ind_lands.nome_ti.str.contains(pattern)]
+    to_change["nome_ti"] = to_change.nome_ti.str.replace("\(\s?restrição\s?(de)?\s?uso\s?\)", "").str.strip()
+    to_change["fase_ti"] = to_change.fase_ti + "/Restrição de Uso"
+
+    ind_lands.loc[to_change.index, ("nome_ti", "fase_ti")] = to_change[["nome_ti", "fase_ti"]]
 
     # Adiciona campos customizados
     ind_lands["biomes"] = ind_lands.apply(add_biomes, args=(biomes,), axis=1)
