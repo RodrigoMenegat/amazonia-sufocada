@@ -259,9 +259,10 @@ def build_thread_7d_grid(data):
 
     # Datas
     today = datetime.now()
-    last_week_date = today - timedelta(days=8) # O cálculo é sempre para oito dias antes, então
+    last_week_date = today - timedelta(days=7) # O cálculo é sempre para sete dias antes, então
                                                # o texto dos tweets só estará correto na data
-                                               # de publicação, às segundas-feiras.
+                                               # de publicação, que acontece nas segundas-feiras,
+                                               # mas com dados de domingo.
 
 
     # Formato DD/MM/YY

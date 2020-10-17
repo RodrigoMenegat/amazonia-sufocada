@@ -401,8 +401,6 @@ def build_original_database():
 
     # Salva como CSV
     save_csv(df, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo.csv")
-    #save_csv(df_dups, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo_com_duplicatas.csv")
-
 
     # Salva como Feather
     save_feather(df,  f"{PROJECT_ROOT}/output/feathers/tilesets/bd_completo.feather")
@@ -512,6 +510,7 @@ def update_original_database(new_data, new_data_dups):
         # Concatena com os novos dados
         datapoints = pd.concat((datapoints, updates))
 
+
         # Mantém apenas os dados do último ano
         year = datetime.datetime.now().year
 
@@ -535,11 +534,11 @@ def update_original_database(new_data, new_data_dups):
             gdf = datapoints.copy()
 
         elif label == "duplicated":
+            
             #save_csv(datapoints, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo_com_duplicatas.csv")
             save_feather(datapoints, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo_com_duplicatas.feather")
             #save_geojson(datapoints, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo_com_duplicatas.geojson")
 
-            # E os dados com duplicatas em outra
             gdf_dups = datapoints.copy()
 
     return gdf, gdf_dups
