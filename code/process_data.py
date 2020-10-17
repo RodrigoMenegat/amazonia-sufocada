@@ -285,7 +285,7 @@ def sanitize_api_duplicates(df, logfile):
     Essa função previne esse comportamento.
     '''
 
-    print(">> Handling duplicates (due to API behavior")
+    print(">> Handling duplicates (due to API behavior)")
     dup_entries = df[df.duplicated(subset=["data", "hora", "latitude", "longitude"], keep='last')]
 
     if logfile == "bd_completo":
@@ -482,7 +482,6 @@ def fetch_recent_data():
         save_feather(df, f"{PROJECT_ROOT}/output/feathers/tilesets/{time}.feather")
         save_feather(df_dups, f"{PROJECT_ROOT}/output/feathers/tilesets/{time}_com_duplicatas.feather")
 
-
         # Salva como GeoJSON
         save_geojson(df, f"{PROJECT_ROOT}/output/jsons/tilesets/{time}.json")
 
@@ -534,7 +533,7 @@ def update_original_database(new_data, new_data_dups):
             gdf = datapoints.copy()
 
         elif label == "duplicated":
-            
+
             #save_csv(datapoints, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo_com_duplicatas.csv")
             save_feather(datapoints, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo_com_duplicatas.feather")
             #save_geojson(datapoints, f"{PROJECT_ROOT}/output/csvs/tilesets/bd_completo_com_duplicatas.geojson")
