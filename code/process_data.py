@@ -631,11 +631,13 @@ def main(argv):
     # atualizado pela primeira vez ou não.
     if len(argv) > 1:
         if argv[1] == "setup":
+            print("IMPORTANT: This is a setup run. Data WILL NOT be updated.")
             setup = True
         else:
             print("Invalid command line argument. Can only be 'setup'")
             sys.exit(1)
     else:
+        print("IMPORTANT: this is an update run. Data WILL be updated.")
         setup = False
 
     
