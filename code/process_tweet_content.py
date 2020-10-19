@@ -172,7 +172,7 @@ def build_thread_most_fire_conservation_units(data):
     c = data["unidades_de_conservacao"]["areas_mais_fogo_24h"]["1"]["n_focos"]
     d = data["unidades_de_conservacao"]["areas_mais_fogo_24h"]["1"]["porcentagem"]
     e = data["unidades_de_conservacao"]["areas_mais_fogo_24h"]["1"]["dias_consecutivos"]
-    estados_1 = data["terras_indigenas"]["areas_mais_fogo_24h"]["1"]["estados"]
+    estados_1 = data["unidades_de_conservacao"]["areas_mais_fogo_24h"]["1"]["estados"]
 
 
     f = data["unidades_de_conservacao"]["areas_mais_fogo_24h"]["2"]["nome"]
