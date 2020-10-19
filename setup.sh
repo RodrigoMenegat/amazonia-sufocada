@@ -7,5 +7,7 @@ python process_subsets.py &&
 python process_tilesets.py &&
 python process_tweet_variables.py &&
 python process_tweet_images.py &&
-python process_tweet_content.py
+python process_tweet_content.py &&
+cd ..
+cp -r -f -T /home/amazonia-sufocada/output /home/amazonia-sufocada-static-output
 
