@@ -49,7 +49,7 @@ SOURCES = [
         ("amzsufocada-terras-indigenas", f"{PROJECT_ROOT}/output/jsons/land_info/terras_indigenas.json"),
         ("amzsufocada-unidades-conserv", f"{PROJECT_ROOT}/output/jsons/land_info/unidades_de_conservacao.json"),
         ("amzsufocada-biomas", f"{PROJECT_ROOT}/output/jsons/land_info/biomas.json"),
-        ("amzusofcada-cidades", f"{PROJECT_ROOT}/output/jsons/land_info/cidades.json"),
+        ("amzusufocada-cidades", f"{PROJECT_ROOT}/output/jsons/land_info/cidades.json"),
         ("amzsufocada-grid-20km", f"{PROJECT_ROOT}/output/jsons/land_info/grid_20km.json"),
         ("amzsufocada-7d-grid-1", f"{PROJECT_ROOT}/output/jsons/tilesets/7d_grid_1.json"),
         ("amzsufocada-7d-grid-2", f"{PROJECT_ROOT}/output/jsons/tilesets/7d_grid_2.json"),
