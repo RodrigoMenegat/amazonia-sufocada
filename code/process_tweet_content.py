@@ -106,7 +106,7 @@ def build_thread_most_fire_indigenous_land(data):
     
     # Chamada para imagem retirada da API do Mapbox.
     tweet = {
-        "text": (f"Este mapa mostra todos os focos de calor em terras indígenas em {day}. As áreas roxas são as {a} terras indígenas onde foram registrados os focos. Cada ponto representa uma área de 375 m² em que o satélite detectou  atividade de fogo."),
+        "text": (f"Este mapa mostra todos os focos de calor em terras indígenas em {day}. As áreas roxas são as {a} terras indígenas onde foram registrados os focos. Cada ponto representa uma área de 0,14 km² em que o satélite detectou  atividade de fogo."),
         "img": "../output/imgs/tweets/ti_24h_todos_os_focos.jpg"
     }
     tweets.append(tweet)
@@ -127,7 +127,7 @@ def build_thread_most_fire_indigenous_land(data):
     tweets.append(tweet)
     
     
-    tweet = { "text": f"Atenção para a metodologia! 📈 Nossa análise usa dados do satélite S-NPP, da NASA, que não é o mesmo que o INPE usa como referência desde 2002. Cada um dos {total_fogo} focos mostrados representa uma área de 375 m² com brilho e calor compatíveis com atividade de fogo.",
+    tweet = { "text": f"Atenção para a metodologia! 📈 Nossa análise usa dados do satélite S-NPP, da NASA, que não é o mesmo que o INPE usa como referência desde 2002. Cada um dos {total_fogo} focos mostrados representa uma área de 0,14 km² com brilho e calor compatíveis com atividade de fogo.",
          "img": None
     }
     tweets.append(tweet)
@@ -199,7 +199,7 @@ def build_thread_most_fire_conservation_units(data):
     
     # Chamada para imagem retirada da API do Mapbox.
     tweet = {
-        "text": (f"No mapa abaixo, as áreas verdes são unidades de conservação com focos de calor em {day}. Cada ponto representa 375 m² em que o satélite detectou atividade de fogo."),
+        "text": (f"No mapa abaixo, as áreas verdes são unidades de conservação com focos de calor em {day}. Cada ponto representa 0,14 km² em que o satélite detectou atividade de fogo."),
         "img": f"{PROJECT_ROOT}/output/imgs/tweets/uc_24h_todos_os_focos.jpg"
         
     } 
@@ -225,7 +225,7 @@ def build_thread_most_fire_conservation_units(data):
     tweets.append(tweet)
     
     
-    tweet = { "text": f"Atenção para a metodologia! 📈 A análise usa dados do satélite S-NPP, da NASA, que tem mais resolução que a referência utilizada pelo Inpe e capta maior número de focos. Cada um dos {total_fogo} focos representa uma área de 375m² que pode conter várias ou uma única frente de fogo.",
+    tweet = { "text": f"Atenção para a metodologia! 📈 A análise usa dados do satélite S-NPP, da NASA, que tem mais resolução que a referência utilizada pelo Inpe e capta maior número de focos. Cada um dos {total_fogo} focos representa uma área de 0,14 km² que pode conter várias ou uma única frente de fogo.",
          "img": None
     }
     tweets.append(tweet)
@@ -330,7 +330,7 @@ def build_thread_7d_grid(data):
 
     # Destaque das áreas
     tweet = {
-        "text": (f"No mapa abaixo, cada quadrado representa uma região de 20km² com ao menos um foco de calor registrado na semana. Quanto mais roxo ele estiver, mais focos de calor aconteceram lá dentro."),
+        "text": (f"No mapa abaixo, cada quadrado representa uma região de 400km² com ao menos um foco de calor registrado na semana. Quanto mais roxo ele estiver, mais focos de calor aconteceram lá dentro."),
         "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_todas_as_areas.jpg"
     }
     tweets.append(tweet)
@@ -428,13 +428,13 @@ def build_thread_7d_grid(data):
 
     # Metodologia
     tweet = {
-            "text": (f"Para identificar as áreas listadas, dividimos o território da Amazônia Legal em uma grade de quadrados de cerca de 20km². As áreas com mais fogo são aquelas que tiveram mais focos de calor detctados pelo satélite S-NPP, da NASA, entre ontem e o domingo anterior, {last_week_date}."),
+            "text": (f"Para identificar as áreas listadas, dividimos o território da Amazônia Legal em uma grade de quadrados de cerca de 20km de lado. As áreas com mais fogo são aquelas que tiveram mais focos de calor detctados pelo satélite S-NPP, da NASA, entre ontem e o domingo anterior, {last_week_date}."),
             "img": None
         }
     tweets.append(tweet)
 
     tweet = {
-            "text": (f"Esse satélite não é o mesmo que o INPE usa como referência desde 2002. Cada um dos {total_semana} focos registrados nessa semana representa uma área de 375 m² com brilho e calor compatíveis com atividade de fogo."),
+            "text": (f"Esse satélite não é o mesmo que o INPE usa como referência desde 2002. Cada um dos {total_semana} focos registrados nessa semana representa uma área de 0,14km² com brilho e calor compatíveis com atividade de fogo."),
             "img": None
         }
     tweets.append(tweet)
