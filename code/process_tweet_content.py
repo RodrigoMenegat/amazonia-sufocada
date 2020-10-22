@@ -330,7 +330,7 @@ def build_thread_7d_grid(data):
 
     # Destaque das áreas
     tweet = {
-        "text": (f"No mapa abaixo, cada quadrado representa uma região de 400km² com ao menos um foco de calor registrado na semana. Quanto mais roxo ele estiver, mais focos de calor aconteceram lá dentro."),
+        "text": (f"No mapa abaixo, cada quadrado representa uma região de 400km² com ao menos um foco de calor registrado na semana. Quanto mais rosa ele estiver, mais focos de calor aconteceram lá dentro."),
         "img": f"{PROJECT_ROOT}/output/imgs/tweets/grid_7d_todas_as_areas.jpg"
     }
     tweets.append(tweet)
