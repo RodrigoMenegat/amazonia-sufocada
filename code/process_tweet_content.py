@@ -428,7 +428,7 @@ def build_thread_7d_grid(data):
 
     # Metodologia
     tweet = {
-            "text": (f"Para identificar as áreas listadas, dividimos o território da Amazônia Legal em uma grade de quadrados de cerca de 20km de lado. As áreas com mais fogo são aquelas que tiveram mais focos de calor detctados pelo satélite S-NPP, da NASA, entre ontem e o domingo anterior, {last_week_date}."),
+            "text": (f"Para identificar as áreas listadas, dividimos o território da Amazônia Legal em uma grade de quadrados com 20km de lado. As áreas com mais fogo são aquelas que tiveram mais focos de calor detctados pelo satélite S-NPP, da NASA, entre ontem e o domingo anterior, {last_week_date}."),
             "img": None
         }
     tweets.append(tweet)
