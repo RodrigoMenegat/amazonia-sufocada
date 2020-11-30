@@ -49,7 +49,7 @@ SOURCES = [
         ("amzsufocada-terras-indigenas", f"{PROJECT_ROOT}/output/jsons/land_info/terras_indigenas.json"),
         ("amzsufocada-unidades-conserv", f"{PROJECT_ROOT}/output/jsons/land_info/unidades_de_conservacao.json"),
         ("amzsufocada-biomas", f"{PROJECT_ROOT}/output/jsons/land_info/biomas.json"),
-        ("amzusufocada-cidades", f"{PROJECT_ROOT}/output/jsons/land_info/cidades.json"),
+        ("amzsufocada-cidades", f"{PROJECT_ROOT}/output/jsons/land_info/cidades.json"),
         ("amzsufocada-grid-20km", f"{PROJECT_ROOT}/output/jsons/land_info/grid_20km.json"),
         ("amzsufocada-7d-grid-1", f"{PROJECT_ROOT}/output/jsons/tilesets/7d_grid_1.json"),
         ("amzsufocada-7d-grid-2", f"{PROJECT_ROOT}/output/jsons/tilesets/7d_grid_2.json"),
@@ -85,7 +85,7 @@ def tippecanoe(source):
                         ]:
                 # Due to a weird bug, combining the --force and -r1 flags creates mbtiles files with zombie points. We will manually rename/remove the files
                 # to avoid this.
-                command = f"{TIPPECANOE_PATH} -zg -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}_new.mbtiles -l {source[0]} {source[1]} -b0 -r1  --drop-densest-as-needed"
+                command = f"{TIPPECANOE_PATH} -z10 -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}_new.mbtiles -l {source[0]} {source[1]} -b0 -r1  --drop-densest-as-needed"
 
                 print(command)
                 result = subprocess.run(command, shell=True, capture_output=True, check=True)
@@ -101,7 +101,7 @@ def tippecanoe(source):
 
         elif source[0] in ["amzsufocada-terras-indigenas", "amzsufocada-unidades-conserv", "amzsufocada-biomas", "amzsufocada-cidades"]:
                 # Tippecanoe needs a buffer to avoid lines in the tile boundaries of polygons
-                command = f"{TIPPECANOE_PATH} -zg --force -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles -l {source[0]} {source[1]}  --drop-densest-as-needed"
+                command = f"{TIPPECANOE_PATH} -z10 --force -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles -l {source[0]} {source[1]}  --drop-densest-as-needed"
 
                 print(command)
                 result = subprocess.run(command, shell=True, capture_output=True, check=True)
@@ -110,7 +110,7 @@ def tippecanoe(source):
 
 
         else:
-                command = f"{TIPPECANOE_PATH} -zg --force -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles -l {source[0]} {source[1]} -b0 --drop-densest-as-needed"
+                command = f"{TIPPECANOE_PATH} -z10 --force -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles -l {source[0]} {source[1]} -b0 --drop-densest-as-needed"
 
 
                 print(command)
