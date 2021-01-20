@@ -50,6 +50,7 @@ SOURCES = [
         ("amzsufocada-unidades-conserv", f"{PROJECT_ROOT}/output/jsons/land_info/unidades_de_conservacao.json"),
         ("amzsufocada-biomas", f"{PROJECT_ROOT}/output/jsons/land_info/biomas.json"),
         ("amzsufocada-cidades", f"{PROJECT_ROOT}/output/jsons/land_info/cidades.json"),
+        ("amzusufocada-cidades", f"{PROJECT_ROOT}/output/jsons/land_info/cidades.json"),
         ("amzsufocada-grid-20km", f"{PROJECT_ROOT}/output/jsons/land_info/grid_20km.json"),
         ("amzsufocada-7d-grid-1", f"{PROJECT_ROOT}/output/jsons/tilesets/7d_grid_1.json"),
         ("amzsufocada-7d-grid-2", f"{PROJECT_ROOT}/output/jsons/tilesets/7d_grid_2.json"),
@@ -75,12 +76,13 @@ def tippecanoe(source):
         '''
 
         # O grid de 20km não sera passado ao tippecanoe. Usaremos o JSON puro.
-        if source[0] == "amzsufocada-grid-20km":
-            return
+        # if source[0] == "amzsufocada-grid-20km":
+        #     return
 
         # Se o output já existir, passa --force. Se não, não
         if source[0] in ["amzsufocada-24h-tis", "amzsufocada-24h-ucs", 
                          "amzsufocada-24h-ti-most-fire", "amzsufocada-24h-ucs-most-fire",
+                         "amzsufocada-grid-20km",
                          "amzsufocada-7d-grid-1", "amzsufocada-7d-grid-2", "amzsufocada-7d-grid-3",
                         ]:
                 # Due to a weird bug, combining the --force and -r1 flags creates mbtiles files with zombie points. We will manually rename/remove the files
@@ -99,7 +101,7 @@ def tippecanoe(source):
                 # Rename the new one
                 os.rename(f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}_new.mbtiles", f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles")
 
-        elif source[0] in ["amzsufocada-terras-indigenas", "amzsufocada-unidades-conserv", "amzsufocada-biomas", "amzsufocada-cidades"]:
+        elif source[0] in ["amzsufocada-terras-indigenas", "amzsufocada-unidades-conserv", "amzsufocada-biomas", "amzsufocada-cidades", "amzusufocada-cidades"]:
                 # Tippecanoe needs a buffer to avoid lines in the tile boundaries of polygons
                 command = f"{TIPPECANOE_PATH} -z10 --force -o {PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles -l {source[0]} {source[1]}  --drop-densest-as-needed"
 

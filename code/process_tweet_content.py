@@ -70,7 +70,7 @@ def build_thread_most_fire_indigenous_land(data):
 
     # Campos usados para evitar repetição exagerada
     day = datetime.now().strftime("%d/%m/%Y")
-    total_geral = data["total_focos_amazonia_legal_2020"]
+    total_geral = data["total_focos_amazonia_legal_2021"]
     total_fogo = data["terras_indigenas"]["total_focos_24h"]
 
 
@@ -133,7 +133,7 @@ def build_thread_most_fire_indigenous_land(data):
     tweets.append(tweet)
     
 
-    tweet = { "text": f"Você pode ver detalhes sobre a situação da Amazônia Legal na página especial do Amazônia Sufocada e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2020. \n\nhttps://infoamazonia.org/sufocada",
+    tweet = { "text": f"Você pode ver detalhes sobre a situação da Amazônia Legal na página especial do Amazônia Sufocada e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2021. \n\nhttps://infoamazonia.org/sufocada",
          "img": None
     }
     tweets.append(tweet)
@@ -160,7 +160,7 @@ def build_thread_most_fire_conservation_units(data):
 
     # Campos usados para evitar repetição exagerada
     day = datetime.now().strftime("%d/%m/%Y")
-    total_geral = data["total_focos_amazonia_legal_2020"]
+    total_geral = data["total_focos_amazonia_legal_2021"]
     total_fogo = data["unidades_de_conservacao"]["total_focos_24h"]
 
     # Cria correspondências curtas para as variáveis,
@@ -231,7 +231,7 @@ def build_thread_most_fire_conservation_units(data):
     tweets.append(tweet)
     
 
-    tweet = { "text": f"Você pode ver mais detalhes sobre a situação da Amazônia Legal na página especial Amazônia Sufocada e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2020. \n\nhttps://infoamazonia.org/sufocada",
+    tweet = { "text": f"Você pode ver mais detalhes sobre a situação da Amazônia Legal na página especial Amazônia Sufocada e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2021. \n\nhttps://infoamazonia.org/sufocada",
          "img": None
     }
     tweets.append(tweet)
@@ -271,7 +271,7 @@ def build_thread_7d_grid(data):
 
     # Gerais
 
-    total_geral = data["total_focos_amazonia_legal_2020"]
+    total_geral = data["total_focos_amazonia_legal_2021"]
     total_semana = data["total_focos_7d"]
     total_focos_7d_uc = data["total_focos_7d_uc"]
     total_focos_7d_uc_pp = round(total_focos_7d_uc / total_semana * 100)
@@ -442,7 +442,7 @@ def build_thread_7d_grid(data):
 
     # Link out
     tweet = {
-            "text": (f"Você pode ver mais detalhes na página especial do Amazônia Sufocada e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2020.\n\nhttps://infoamazonia.org/sufocada"),
+            "text": (f"Você pode ver mais detalhes na página especial do Amazônia Sufocada e navegar pelo mapa interativo com todos os {total_geral} focos de calor registrados na região em 2021.\n\nhttps://infoamazonia.org/sufocada"),
             "img": None
         }
     tweets.append(tweet)

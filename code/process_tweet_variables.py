@@ -287,7 +287,7 @@ def find_values_24h():
 
 
     return {
-        "total_focos_amazonia_legal_2020": DF_FULL.shape[0],
+        "total_focos_amazonia_legal_2021": DF_FULL.shape[0],
     	"terras_indigenas": terras_indigenas,
     	"unidades_de_conservacao": unidades_de_conservacao
     }
@@ -406,7 +406,7 @@ def find_values_7d():
         grid["areas_mais_fogo_7d"][f"{i}"] = find_grid_with_most_fire("7d", DF_7D.shape[0], i)
 
     return {
-        "total_focos_amazonia_legal_2020": DF_FULL.shape[0],
+        "total_focos_amazonia_legal_2021": DF_FULL.shape[0],
         "total_focos_7d": DF_7D.shape[0],
         "total_focos_7d_uc": DF_7D[~DF_7D.cod_uc.isna()].shape[0],
         "total_focos_7d_ti": DF_7D[~DF_7D.cod_ti.isna()].shape[0],
