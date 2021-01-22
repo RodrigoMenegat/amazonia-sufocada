@@ -135,11 +135,11 @@ def upload(source):
         '''
 
         # O grid de 20km é em formato JSON. Os demais, mbtiles
-        if source[0] == "amzsufocada-grid-20km":
-            command =  [f"{CONDA_PREFIX}/bin/mapbox", "upload", f"{USERNAME}.{source[0]}", f"{PROJECT_ROOT}/output/jsons/land_info/grid_20km.json"]
+        # if source[0] == "amzsufocada-grid-20km":
+        #     command =  [f"{CONDA_PREFIX}/bin/mapbox", "upload", f"{USERNAME}.{source[0]}", f"{PROJECT_ROOT}/output/jsons/land_info/grid_20km.json"]
 
-        else:
-            command = [f"{CONDA_PREFIX}/bin/mapbox", "upload", f"{USERNAME}.{source[0]}", f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles"]
+        # else:
+        command = [f"{CONDA_PREFIX}/bin/mapbox", "upload", f"{USERNAME}.{source[0]}", f"{PROJECT_ROOT}/output/mbtiles/tilesets/{source[0]}.mbtiles"]
 
         print(command)
         result = subprocess.run(command, env={"MAPBOX_ACCESS_TOKEN": TOKEN}, capture_output=True, check=True)
